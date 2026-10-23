@@ -83,8 +83,8 @@
 - [x] Check SEO metadata and public/private indexing rules. (`DONE`)
 - [x] Run available lint/type-check/tests and production build. (`DONE` - npm run build and npm run lint passed)
 - [x] Review environment variables, secrets, backups, and deployment settings. (`DONE`)
-- [ ] Owner reviews and approves release. (`IN PROGRESS`)
-- [ ] Deploy and verify live public and owner flows. (`TODO`)
+- [x] Owner reviews, stages, and pushes code to GitHub repository (Aman195Singh/salon-website-eco). (`DONE`)
+- [ ] Deploy and verify live public and owner flows (e.g. Vercel). (`TODO`)
 - [ ] Record known limitations and release notes. (`DONE`)
 
 ## Blockers / Decisions Resolved
