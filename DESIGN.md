@@ -1,6 +1,6 @@
-# Design Brief — Salon Website V1
+# Design System — Salon Website
 
-**Status:** Initial design direction; confirm brand details with the owner.  
+**Status:** Shared design rules for all releases; confirm brand details with the owner.  
 **Purpose:** Define a consistent public website and a usable owner editing experience without creating a complex page builder.
 
 ## 1. Design Goals
@@ -121,3 +121,13 @@ Use subtle, purposeful transitions only. Respect `prefers-reduced-motion`. Do no
 4. Build the remaining public pages using the approved system.
 5. Design the dashboard shell and one page-editing flow before implementing every CMS section.
 6. Update this document only when an intentional design decision changes.
+
+
+## 9. Release Compatibility and V1.5 Polish
+
+- Keep the existing approved visual identity and component behaviour unless a specific V1.5 task requires a change.
+- Prefer small, consistent improvements over a full redesign.
+- New controls must reuse existing spacing, typography, colour, focus, button, and form conventions.
+- New and existing forms/data-driven screens should clearly communicate loading, success, empty, and error states.
+- Preserve accessible keyboard and mobile behaviour when improving components.
+- V2 business workflows are not part of the V1.5 design scope.
