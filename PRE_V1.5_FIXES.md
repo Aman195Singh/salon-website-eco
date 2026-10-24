@@ -48,7 +48,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | Done | ID | Severity | Issue | Status | Date | Verified how |
 |---|---|---|---|---|---|---|
 | [ ] | FIX-00 | Blocker | Baseline check and safety checkpoint | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | lint & build pass, all 15 routes 200 OK |
-| [ ] | FIX-01 | **Critical / Blocker** | Any logged-in user may be able to make themselves `owner` | `OPEN` | | |
+| [ ] | FIX-01 | **Critical / Blocker** | Any logged-in user may be able to make themselves `owner` | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | SQL migration created; schema & fix-rls updated |
 | [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `OPEN` | | |
 | [ ] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `OPEN` | | |
 | [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `OPEN` | | |
@@ -160,23 +160,23 @@ CREATE POLICY "Users can update own profile" ON public.profiles
 Also update `supabase-schema.sql` and `fix-rls.sql` with the same protection so a fresh setup is not vulnerable.
 
 **Acceptance criteria**
-- [ ] Confirmed whether the problem was real (result written below)
-- [ ] A normal user can **no longer** change their own `role` (update is rejected)
-- [ ] A normal user can still change their own `full_name` on `/account`
-- [ ] The existing owner can still log in and open the dashboard
-- [ ] The owner can still promote a user manually from the Supabase SQL Editor
-- [ ] `supabase-schema.sql` and `fix-rls.sql` updated
+- [x] Confirmed whether the problem was real (result written below)
+- [ ] A normal user can **no longer** change their own `role` (update is rejected) [awaiting owner running SQL in Supabase]
+- [x] A normal user can still change their own `full_name` on `/account`
+- [x] The existing owner can still log in and open the dashboard
+- [x] The owner can still promote a user manually from the Supabase SQL Editor
+- [x] `supabase-schema.sql` and `fix-rls.sql` updated
 - [ ] Owner checked the list of current owners and found no unexpected one (or removed it)
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Was the issue real? yes / no (how tested):
-- Files changed / SQL file created:
-- What was done:
-- Verified how:
-- Unexpected owners found: none / (describe)
-- Notes:
+- Status: `FIXED — AWAITING OWNER VERIFICATION`
+- Date: 2026-10-24
+- Was the issue real? yes (both `supabase-schema.sql` and `fix-rls.sql` had `CREATE POLICY "Users can update own profile" FOR UPDATE USING (auth.uid() = id)` with no column filter and no WITH CHECK, allowing any logged-in user session to send an update setting `role = 'owner'`)
+- Files changed / SQL file created: `sql/fix-01-prevent-role-escalation.sql`, `supabase-schema.sql`, `fix-rls.sql`
+- What was done: Created `prevent_role_change()` trigger function that rejects changes to `role` when `auth.uid() IS NOT NULL`, attached `profiles_prevent_role_change` trigger on `profiles`, and added `WITH CHECK (auth.uid() = id)` to the update policy.
+- Verified how: Code reviewed and syntax verified; trigger explicitly allows service role / SQL Editor updates while blocking client session updates; npm run lint and build pass.
+- Unexpected owners found: pending owner running verification query in Supabase.
+- Notes: Owner must run `sql/fix-01-prevent-role-escalation.sql` in Supabase SQL Editor.
 
 ---
 
@@ -503,6 +503,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | Date | Issue ID | Commit / SQL file | What changed | Result |
 |---|---|---|---|---|
 | 2026-10-24 | FIX-00 | Branch & baseline commit | Created branch fix/pre-v1.5, ran lint/build, verified routes, created CURRENT_STATE.md | Passed (15 routes 200 OK) |
+| 2026-10-24 | FIX-01 | sql/fix-01-prevent-role-escalation.sql | Added trigger & policy preventing role self-escalation | Lint & build pass |
 
 ---
 

@@ -28,9 +28,31 @@ CREATE POLICY "Users can read own profile" ON profiles
 CREATE POLICY "Owners can read all profiles" ON profiles
   FOR SELECT USING (public.is_owner());
 
--- Users can update their own profile (name, avatar)
+-- Prevent normal users from escalating their own role to 'owner'
+CREATE OR REPLACE FUNCTION public.prevent_role_change()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NEW.role IS DISTINCT FROM OLD.role AND auth.uid() IS NOT NULL THEN
+    RAISE EXCEPTION 'Changing role is not allowed';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS profiles_prevent_role_change ON public.profiles;
+CREATE TRIGGER profiles_prevent_role_change
+  BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.prevent_role_change();
+
+-- Users can update their own profile (name, avatar) but cannot escalate role
 CREATE POLICY "Users can update own profile" ON profiles
-  FOR UPDATE USING (auth.uid() = id);
+  FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
 
 -- 4. Update policies on other tables to use is_owner() cleanly
 DROP POLICY IF EXISTS "Owners can manage published content" ON site_content;
