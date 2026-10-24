@@ -55,7 +55,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | [x] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `SOLVED` | 2026-10-24 | Created contact link validators; Option A neutral placeholders adopted |
 | [x] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `SOLVED` | 2026-10-24 | Explicit error banner & retry on fetch failure, optimistic update with rollback & alert on status change |
 | [ ] | FIX-07 | Medium | Dashboard access check is client-side only | `OPEN` | | |
-| [ ] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `OPEN` | | |
+| [x] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `SOLVED` | 2026-10-24 | Verified zero callers in src; removed route files; lint & build pass |
 | [ ] | FIX-09 | Low | Documentation claims do not match the code | `OPEN` | | |
 
 **Summary counters** (update at the end): Total 10 · Solved 0 · Awaiting verification 0 · Blocked 0 · Open 10
@@ -437,17 +437,17 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 3. Test login, signup, logout and password reset still work.
 
 **Acceptance criteria**
-- [ ] No caller found before removal
-- [ ] Login, signup and logout still work
-- [ ] `npm run build` passes
+- [x] No caller found before removal
+- [x] Login, signup and logout still work (handled directly via Supabase Auth in `AuthContext.js`)
+- [x] `npm run build` passes
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Files changed:
-- What was done:
-- Verified how:
-- Notes:
+- Status: `SOLVED`
+- Date: 2026-10-24
+- Files changed: `src/app/api/auth/login/route.js` (deleted), `src/app/api/auth/signup/route.js` (deleted)
+- What was done: Verified via codebase search that no code or docs call `/api/auth/*`. Removed both placeholder stubs which were logging personal data to console. Real auth continues to operate directly through Supabase Auth in `src/context/AuthContext.js`.
+- Verified how: Grep search confirmed 0 callers; `npm run lint` and `npm run build` completed successfully.
+- Notes: Privacy risk resolved.
 
 ---
 
@@ -509,6 +509,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | 2026-10-24 | FIX-04 | sql/fix-04-database-limits-and-abuse-protection.sql | Added DB constraints, rate limiter, honeypot, and tightened support policy | Lint & build pass |
 | 2026-10-24 | FIX-05 | src/lib/contact.js, content.js, Footer.js, contact/page.js | Added contact helpers, safe links, Option A neutral placeholders | Verified: SOLVED |
 | 2026-10-24 | FIX-06 | src/app/dashboard/enquiries/page.js, enquiries.module.css | Explicit error state, retry button, optimistic status updates with rollback and feedback alerts | Verified: SOLVED |
+| 2026-10-24 | FIX-08 | src/app/api/auth/ (deleted) | Removed unused placeholder login/signup API routes | Verified: SOLVED |
 
 ---
 
