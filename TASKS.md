@@ -87,6 +87,23 @@
 - [ ] Deploy and verify live public and owner flows (e.g. Vercel). (`TODO`)
 - [x] Record known limitations and release notes. (`DONE` - Documented in PRE_V1.5_FIXES.md and CURRENT_STATE.md)
 
+## Phase 7 — V1.5 Quality Release
+
+- [x] V15-01: Baseline code audit, fill CURRENT_STATE.md, manual regression checklist. (`DONE`)
+- [x] V15-02: Loading, empty, success, and error states across login, account, contact, analytics. (`DONE`)
+- [x] V15-03: Responsive layout polish (320px–1440px) and non-intrusive mobile chatbot positioning. (`DONE`)
+- [x] V15-04: Enquiry inbox search, date filtering (all/today/7d/30d), and contact quick actions. (`DONE`)
+- [x] V15-05: Reply via Email zero-setup mailto composer with editable fields and copy fallback. (`DONE`)
+- [x] V15-06: Verified contact quick actions (wa.me, tel:, maps) in Footer, Contact page, and cards. (`DONE`)
+- [x] V15-07: CMS save states (Saving/Saved/Failed), beforeunload prompt, publish confirm, inline validation. (`DONE`)
+- [x] V15-08: Security and privacy re-audit, rate-limiter memory pruning, and safe UUID validation. (`DONE`)
+- [x] V15-09: SEO metadata, sitemap.xml, robots.txt, robots noindex on private routes, LocalBusiness JSON-LD. (`DONE`)
+- [x] V15-10: Accessibility (prefers-reduced-motion, focus-visible, skip link, dialog Escape) and performance. (`DONE`)
+- [x] V15-11: Basic legal pages (/privacy, /terms) with draft review notices linked in Footer. (`DONE`)
+- [x] V15-12: Testimonials deferred; placeholder reviews removed from public home page. (`DONE`)
+- [x] V15-13: Analytics readability, descriptive metric subtitles, timeframe label, and empty states. (`DONE`)
+- [x] V15-14: Full regression, RLS test script verification, and release documentation. (`DONE`)
+
 ## Blockers / Decisions Resolved
 
 - Auth/onboarding: Resolved (Supabase Auth, default 'user' role, owner SQL promotion).
@@ -95,3 +112,4 @@
 - Enquiry and support delivery: Resolved (Supabase `enquiries` and `support_requests` tables).
 - Analytics provider/method: Resolved (Privacy-friendly first-party events table).
 - Hosting/domain/budget: Ready for Vercel/Netlify free tier deployment with Supabase.
+

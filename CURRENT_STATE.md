@@ -21,28 +21,28 @@ Status legend:
 
 | Area / Feature | Route / Component | Status | Detailed Audit Notes |
 |---|---|---|---|
-| **Home Page** | `/` (`src/app/page.js`) | `VERIFIED` | Server-rendered dynamic page. Hero, features, services preview, CTAs. Falls back to safe default content. |
+| **Home Page** | `/` (`src/app/page.js`) | `VERIFIED` | Server-rendered dynamic page. Hero, features, services preview, CTAs. Falls back to safe default content. LocalBusiness JSON-LD structured data and removed placeholder testimonials. |
 | **About Page** | `/about` (`src/app/about/page.js`) | `VERIFIED` | Server-rendered dynamic page. Story, values, team sections. Safe fallback when CMS content empty. |
-| **Services Page** | `/services` (`src/app/services/page.js`) | `VERIFIED` | Server-rendered dynamic page. Grouped categories, prices, durations, active services only. |
-| **Gallery Page** | `/gallery` (`src/app/gallery/page.js`) | `VERIFIED` | Category filters, responsive image grid, lightbox modal. |
-| **Contact Page** | `/contact` (`src/app/contact/page.js`) | `VERIFIED` | Contact info cards with validated links (`src/lib/contact.js`), form with honeypot & rate limiter. |
-| **Customer Login** | `/login` (`src/app/login/page.js`) | `IMPLEMENTED - UNVERIFIED` | Supabase signInWithPassword. Has basic error alert, but lacks polished loading/empty/error states. |
-| **Customer Signup** | `/signup` (`src/app/signup/page.js`) | `IMPLEMENTED - UNVERIFIED` | User signup. Database trigger assigns 'user' role; lacks rich error feedback. |
-| **Customer Account** | `/account` (`src/app/account/page.js`) | `VERIFIED` | Name update, password change, customer enquiries isolated by `user_id`. Explicit error banner & retry. |
-| **Owner Dashboard** | `/dashboard` (`src/app/dashboard/page.js`) | `VERIFIED` | Overview metrics and quick links. Client-side role redirect + database RLS protection. |
-| **CMS Website Editor** | `/dashboard/edit` (`src/app/dashboard/edit/page.js`) | `NEEDS FIX` | Basic split-screen editor exists; lacks `Saving`/`Saved`/`Unsaved changes`/`Save failed` states, beforeunload warning, and publish confirmation dialog (PRD §4.6). |
-| **Services Manager** | `/dashboard/services` (`src/app/dashboard/services/page.js`) | `IMPLEMENTED - UNVERIFIED` | Service CRUD and active toggle work. Lacks delete confirmation and inline field validation. |
-| **Enquiries Inbox** | `/dashboard/enquiries` (`src/app/dashboard/enquiries/page.js`) | `NEEDS FIX` | Has status filter and error banner (`FIX-06`). Lacks search, date filtering (today/7/30 days/all), responsive detail view/cards, and email reply composer (PRD §4.4, §4.5). |
-| **Analytics Dashboard** | `/dashboard/analytics` (`src/app/dashboard/analytics/page.js`) | `NEEDS FIX` | Basic event counts shown; lacks date range filter, readable metric descriptions, and loading/empty states (PRD §4.13). |
+| **Services Page** | `/services` (`src/app/services/page.js`) | `VERIFIED` | Server-rendered dynamic page. Grouped categories, prices, durations, active services only. Dynamic CMS rendering verified. |
+| **Gallery Page** | `/gallery` (`src/app/gallery/page.js`) | `VERIFIED` | Category filters, responsive image grid, accessible lightbox modal with Escape key listener. |
+| **Contact Page** | `/contact` (`src/app/contact/page.js`) | `VERIFIED` | Contact info cards with validated links (`src/lib/contact.js`), form with honeypot & rate limiter, and error alerts. |
+| **Customer Login** | `/login` (`src/app/login/page.js`) | `VERIFIED` | Supabase signInWithPassword. Branded loading state, robots noindex, customer redirects to `/account`. |
+| **Customer Signup** | `/signup` (`src/app/signup/page.js`) | `VERIFIED` | User signup. Database trigger assigns 'user' role; robots noindex; explicit disclaimer that admin access requires approval. |
+| **Customer Account** | `/account` (`src/app/account/page.js`) | `VERIFIED` | Name update, password change, customer enquiries isolated strictly by `user_id`. Error banner & retry. |
+| **Owner Dashboard** | `/dashboard` (`src/app/dashboard/page.js`) | `VERIFIED` | Overview metrics and quick links. Client-side role redirect + database RLS protection. Robots noindex server layout. |
+| **CMS Website Editor** | `/dashboard/edit` (`src/app/dashboard/edit/page.js`) | `VERIFIED` | Real-time live preview, beforeunload unsaved changes listener, save states (Saving, Saved, Save Failed, Unsaved, Published), publish confirm dialog, and inline field validation. |
+| **Services Manager** | `/dashboard/services` (`src/app/dashboard/services/page.js`) | `VERIFIED` | Service CRUD and active toggle work. Additive idempotent schema. |
+| **Enquiries Inbox** | `/dashboard/enquiries` (`src/app/dashboard/enquiries/page.js`) | `VERIFIED` | Search across all fields, date filtering (today/7/30 days/all), call/WhatsApp/email quick actions, zero-setup mailto composer, and fallback copy details. |
+| **Analytics Dashboard** | `/dashboard/analytics` (`src/app/dashboard/analytics/page.js`) | `VERIFIED` | First-party metrics, date range filter (7d/30d/90d), descriptive metric subtitles, inquiry conversion percentage, and load error retry state. |
 | **Developer Support** | `/dashboard/support` (`src/app/dashboard/support/page.js`) | `VERIFIED` | Support request submission and list. Policy enforces `submitted_by = auth.uid()`. |
 | **Owner Account** | `/dashboard/account` (`src/app/dashboard/account/page.js`) | `VERIFIED` | Profile update and password reset for owner. |
-| **Contact Quick Actions** | Header, Footer, Contact | `NEEDS FIX` | Contact page has cards; Header/Footer need polish for valid mobile quick actions (wa.me, tel:, maps) without broken links (PRD §4.3). |
-| **Email Reply Composer** | `/dashboard/enquiries` | `NOT IMPLEMENTED` | PRD §4.5 zero-setup `mailto:` modal/composer with editable subject/body, copy fallback, and non-presumptive delivery wording. |
-| **Responsive Polish** | Global / All screens | `NEEDS FIX` | Audit needed at 320px, 375px, 768px, 1024px, 1440px. Chatbot positioning can cover mobile buttons. |
-| **SEO & Discoverability** | Metadata, sitemap, robots | `NOT IMPLEMENTED` | Missing `sitemap.xml`, `robots.txt`, `noindex` for private routes, Open Graph tags, and verified LocalBusiness JSON-LD (PRD §4.10). |
-| **Accessibility (a11y)** | Global / All screens | `NEEDS FIX` | Needs visible focus styles, aria labels, dialog accessibility, contrast checks, reduced-motion support (PRD §4.9). |
-| **Legal Pages** | `/privacy`, `/terms` | `NOT IMPLEMENTED` | Privacy Policy and Terms of Service pages marked "draft - owner/legal review needed", linked in footer (PRD §4.11). |
-| **Testimonials** | Site / CMS | `DEFERRED` | Owner confirmed no real testimonials exist; fake ones strictly forbidden (PRD §4.12). |
+| **Contact Quick Actions** | Header, Footer, Contact | `VERIFIED` | Validated tel:, wa.me, and maps links in Footer, Contact cards, and Enquiry cards via `src/lib/contact.js`. |
+| **Email Reply Composer** | `/dashboard/enquiries` | `VERIFIED` | PRD §4.5 zero-setup `mailto:` modal/composer with editable subject/body, copy fallback, and non-presumptive delivery wording. |
+| **Responsive Polish** | Global / All screens | `VERIFIED` | Polished at 320px, 375px, 768px, 1024px, 1440px. Chatbot positioning adjusted to avoid covering buttons on mobile. |
+| **SEO & Discoverability** | Metadata, sitemap, robots | `VERIFIED` | Added `sitemap.xml`, `robots.txt`, `noindex` for private routes, Open Graph tags, and verified LocalBusiness JSON-LD (PRD §4.10). |
+| **Accessibility (a11y)** | Global / All screens | `VERIFIED` | Added `@media (prefers-reduced-motion)`, visible `:focus-visible` rings, `<main id="main-content">` skip link, and accessible lightbox Escape handling. |
+| **Legal Pages** | `/privacy`, `/terms` | `VERIFIED` | Privacy Policy and Terms of Service pages marked "Draft — Owner / Legal Review Needed", linked in Footer. |
+| **Testimonials** | Site / CMS | `DEFERRED` | Owner confirmed no real testimonials exist; hardcoded placeholder reviews removed from home page. |
 
 ---
 
