@@ -4,12 +4,12 @@
  */
 
 /**
- * Validates a phone number. Must contain at least 7 digits and no placeholder characters ('X'/'x').
+ * Validates a phone number. Must contain at least 7 digits and no placeholder runs ('XXXX').
  */
 export function isValidPhone(phone) {
   if (!phone || typeof phone !== "string") return false;
   const trimmed = phone.trim();
-  if (/x/i.test(trimmed)) return false;
+  if (/x{4,}/i.test(trimmed)) return false;
   const digitsOnly = trimmed.replace(/\D/g, "");
   return digitsOnly.length >= 7 && digitsOnly.length <= 15;
 }
@@ -24,12 +24,12 @@ export function getPhoneLink(phone) {
 }
 
 /**
- * Validates WhatsApp number. Needs 10 to 15 digits, no placeholder characters ('X'/'x').
+ * Validates WhatsApp number. Needs 10 to 15 digits, no placeholder runs ('XXXX').
  */
 export function isValidWhatsApp(whatsapp) {
   if (!whatsapp || typeof whatsapp !== "string") return false;
   const trimmed = whatsapp.trim();
-  if (/x/i.test(trimmed)) return false;
+  if (/x{4,}/i.test(trimmed)) return false;
   const digitsOnly = trimmed.replace(/\D/g, "");
   return digitsOnly.length >= 10 && digitsOnly.length <= 15;
 }
@@ -44,12 +44,12 @@ export function getWhatsAppLink(whatsapp) {
 }
 
 /**
- * Validates email address format.
+ * Validates email address format and rejects placeholder runs ('XXXX').
  */
 export function isValidEmail(email) {
   if (!email || typeof email !== "string") return false;
   const trimmed = email.trim();
-  if (/x/i.test(trimmed)) return false;
+  if (/x{4,}/i.test(trimmed)) return false;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
 }
 
