@@ -32,7 +32,13 @@ const QUICK_LINKS = [
 
 import { useState, useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
-import { getPhoneLink, getMailtoLink, getSocialLink } from "@/lib/contact";
+import {
+  getPhoneLink,
+  getWhatsAppLink,
+  getMailtoLink,
+  getMapLink,
+  getSocialLink,
+} from "@/lib/contact";
 
 function renderFooterSocialIcon(platform) {
   switch (platform) {
@@ -56,8 +62,10 @@ export default function Footer() {
     name: DEFAULT_CONTENT.general.salonName,
     tagline: DEFAULT_CONTENT.general.tagline,
     phone: DEFAULT_CONTENT.general.phone,
+    whatsapp: DEFAULT_CONTENT.general.whatsapp || "",
     email: DEFAULT_CONTENT.general.email,
     address: DEFAULT_CONTENT.general.address,
+    mapLink: DEFAULT_CONTENT.general.mapLink || "",
     hours: "",
   });
   const [socialLinks, setSocialLinks] = useState([]);
@@ -75,8 +83,10 @@ export default function Footer() {
           name: g.salonName || DEFAULT_CONTENT.general.salonName,
           tagline: g.tagline || DEFAULT_CONTENT.general.tagline,
           phone: g.phone || "",
+          whatsapp: g.whatsapp || "",
           email: g.email || "",
           address: g.address || "",
+          mapLink: g.mapLink || "",
           hours: hoursStr,
         });
       }
@@ -165,6 +175,14 @@ export default function Footer() {
                 )}
               </li>
             )}
+            {salonInfo.whatsapp && getWhatsAppLink(salonInfo.whatsapp) && (
+              <li className={styles.contactItem}>
+                <FaWhatsapp size={16} className={styles.contactIcon} style={{ color: "#25D366" }} />
+                <a href={getWhatsAppLink(salonInfo.whatsapp)} target="_blank" rel="noopener noreferrer">
+                  {salonInfo.whatsapp}
+                </a>
+              </li>
+            )}
             {salonInfo.email && (
               <li className={styles.contactItem}>
                 <HiOutlineMail size={16} className={styles.contactIcon} />
@@ -178,7 +196,13 @@ export default function Footer() {
             {salonInfo.address && (
               <li className={styles.contactItem}>
                 <HiOutlineLocationMarker size={16} className={styles.contactIcon} />
-                <span>{salonInfo.address}</span>
+                {getMapLink(salonInfo.mapLink) ? (
+                  <a href={getMapLink(salonInfo.mapLink)} target="_blank" rel="noopener noreferrer">
+                    {salonInfo.address}
+                  </a>
+                ) : (
+                  <span>{salonInfo.address}</span>
+                )}
               </li>
             )}
             {salonInfo.hours && (
