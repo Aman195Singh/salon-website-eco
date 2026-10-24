@@ -210,6 +210,13 @@ ul, ol {
   padding: 0 var(--space-6);
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-4);
+  }
+}
+
+
 .sr-only {
   position: absolute;
   width: 1px;

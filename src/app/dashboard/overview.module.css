@@ -214,6 +214,12 @@
   }
 }
 
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .statsGrid {
     grid-template-columns: 1fr 1fr;

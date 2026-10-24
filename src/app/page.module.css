@@ -282,6 +282,12 @@
   }
 }
 
+@media (max-width: 480px) {
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .featuresGrid {
     grid-template-columns: 1fr 1fr;
