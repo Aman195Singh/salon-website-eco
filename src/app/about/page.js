@@ -7,6 +7,8 @@ import {
 import { getPublishedContent } from "@/lib/content";
 import styles from "./about.module.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "About Us",
   description:

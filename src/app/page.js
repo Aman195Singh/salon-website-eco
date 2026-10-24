@@ -13,6 +13,8 @@ import { getPublishedContent, DEFAULT_SERVICES } from "@/lib/content";
 import { supabaseServer } from "@/lib/supabase-server";
 import styles from "./page.module.css";
 
+export const dynamic = "force-dynamic";
+
 const FEATURES = [
   {
     icon: <HiOutlineSparkles size={28} />,

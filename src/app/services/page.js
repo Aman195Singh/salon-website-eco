@@ -4,6 +4,8 @@ import { supabaseServer } from "@/lib/supabase-server";
 import { DEFAULT_SERVICES } from "@/lib/content";
 import styles from "./services.module.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Services & Pricing",
   description:
