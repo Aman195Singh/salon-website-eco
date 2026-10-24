@@ -18,6 +18,7 @@ import {
   FaTwitter,
   FaTiktok,
   FaPinterest,
+  FaLinkedinIn,
   FaGlobe,
 } from "react-icons/fa";
 import styles from "./contact.module.css";
@@ -43,6 +44,7 @@ function renderSocialIcon(platform) {
     case "twitter": return <FaTwitter size={16} />;
     case "tiktok": return <FaTiktok size={16} />;
     case "pinterest": return <FaPinterest size={16} />;
+    case "linkedin": return <FaLinkedinIn size={16} />;
     default: return <FaGlobe size={16} />;
   }
 }
@@ -237,13 +239,15 @@ export default function ContactPage() {
 
               {/* Dynamic Social Media Links */}
               {(() => {
-                const rawLinks = contactPage?.socialLinks && contactPage.socialLinks.length > 0
-                  ? contactPage.socialLinks
-                  : [
-                      contactInfo.instagram ? { platform: "instagram", url: contactInfo.instagram } : null,
-                      contactInfo.facebook ? { platform: "facebook", url: contactInfo.facebook } : null,
-                      contactInfo.youtube ? { platform: "youtube", url: contactInfo.youtube } : null,
-                    ].filter(Boolean);
+                const rawLinks = (contactInfo?.socialLinks && contactInfo.socialLinks.length > 0)
+                  ? contactInfo.socialLinks
+                  : (contactPage?.socialLinks && contactPage.socialLinks.length > 0)
+                    ? contactPage.socialLinks
+                    : [
+                        contactInfo.instagram ? { platform: "instagram", url: contactInfo.instagram } : null,
+                        contactInfo.facebook ? { platform: "facebook", url: contactInfo.facebook } : null,
+                        contactInfo.youtube ? { platform: "youtube", url: contactInfo.youtube } : null,
+                      ].filter(Boolean);
 
                 const validLinks = rawLinks
                   .map((item) => ({

@@ -26,6 +26,7 @@ import {
   FaTwitter,
   FaTiktok,
   FaPinterest,
+  FaLinkedinIn,
   FaGlobe,
 } from "react-icons/fa";
 import {
@@ -47,6 +48,7 @@ function renderPreviewSocialIcon(platform) {
     case "twitter": return <FaTwitter size={14} />;
     case "tiktok": return <FaTiktok size={14} />;
     case "pinterest": return <FaPinterest size={14} />;
+    case "linkedin": return <FaLinkedinIn size={14} />;
     default: return <FaGlobe size={14} />;
   }
 }
@@ -124,46 +126,41 @@ export default function EditWebsitePage() {
     });
   };
 
-  // Handle social media links
+  // Handle social media links (synced across general and contact sections)
   const handleAddSocialLink = () => {
     setContent((prev) => {
-      const current = prev.contact?.socialLinks || [];
+      const current = prev.general?.socialLinks || prev.contact?.socialLinks || [];
+      const updated = [...current, { platform: "instagram", url: "" }];
       return {
         ...prev,
-        contact: {
-          ...prev.contact,
-          socialLinks: [...current, { platform: "instagram", url: "" }],
-        },
+        general: { ...prev.general, socialLinks: updated },
+        contact: { ...prev.contact, socialLinks: updated },
       };
     });
   };
 
   const handleSocialLinkChange = (index, key, value) => {
     setContent((prev) => {
-      const current = [...(prev.contact?.socialLinks || [])];
+      const current = [...(prev.general?.socialLinks || prev.contact?.socialLinks || [])];
       if (current[index]) {
         current[index] = { ...current[index], [key]: value };
       }
       return {
         ...prev,
-        contact: {
-          ...prev.contact,
-          socialLinks: current,
-        },
+        general: { ...prev.general, socialLinks: current },
+        contact: { ...prev.contact, socialLinks: current },
       };
     });
   };
 
   const handleRemoveSocialLink = (index) => {
     setContent((prev) => {
-      const current = [...(prev.contact?.socialLinks || [])];
+      const current = [...(prev.general?.socialLinks || prev.contact?.socialLinks || [])];
       current.splice(index, 1);
       return {
         ...prev,
-        contact: {
-          ...prev.contact,
-          socialLinks: current,
-        },
+        general: { ...prev.general, socialLinks: current },
+        contact: { ...prev.contact, socialLinks: current },
       };
     });
   };
@@ -228,6 +225,8 @@ export default function EditWebsitePage() {
       setAlert({ type: "success", message: "Edits reverted." });
     }
   };
+
+  const socialList = content.general?.socialLinks || content.contact?.socialLinks || [];
 
   return (
     <div className={styles.container}>
@@ -453,6 +452,22 @@ export default function EditWebsitePage() {
                 </div>
 
                 <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Google Maps Link</label>
+                  <input
+                    type="url"
+                    className={styles.input}
+                    placeholder="https://maps.app.goo.gl/... or https://maps.google.com/?q=..."
+                    value={content.general?.mapLink || ""}
+                    onChange={(e) =>
+                      handleChange("general", "mapLink", e.target.value)
+                    }
+                  />
+                  <span className={styles.helperText}>
+                    Paste your salon&apos;s Google Maps share link. Tapping the address on Contact page or Footer will open your location.
+                  </span>
+                </div>
+
+                <div className={styles.fieldGroup}>
                   <label className={styles.label}>Opening Hours</label>
                   {content.general?.hours?.map((h, i) => (
                     <div
@@ -483,6 +498,65 @@ export default function EditWebsitePage() {
                       />
                     </div>
                   ))}
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Social Media Accounts</label>
+                  <span className={styles.helperText} style={{ marginBottom: "8px", display: "block" }}>
+                    Add links to your social profiles (Instagram, YouTube, WhatsApp, Facebook, Snapchat, Twitter / X, TikTok, Pinterest, LinkedIn, Other / Website). They will appear on your Contact page and in the Footer.
+                  </span>
+
+                  {(!socialList || socialList.length === 0) ? (
+                    <p className={styles.socialEmptyText}>No social media links added yet. Click &quot;+ Add Social Link&quot; below.</p>
+                  ) : (
+                    socialList.map((item, index) => (
+                      <div key={index} className={styles.socialRowEditor}>
+                        <select
+                          className={styles.socialSelect}
+                          value={item.platform || "instagram"}
+                          onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
+                        >
+                          <option value="instagram">Instagram</option>
+                          <option value="youtube">YouTube</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="facebook">Facebook</option>
+                          <option value="snapchat">Snapchat</option>
+                          <option value="twitter">Twitter / X</option>
+                          <option value="tiktok">TikTok</option>
+                          <option value="pinterest">Pinterest</option>
+                          <option value="linkedin">LinkedIn</option>
+                          <option value="website">Other / Website</option>
+                        </select>
+                        <input
+                          type="text"
+                          className={`${styles.input} ${styles.socialInput}`}
+                          placeholder={
+                            item.platform === "whatsapp"
+                              ? "Phone number or https://wa.me/..."
+                              : "https://... (profile or channel link)"
+                          }
+                          value={item.url || ""}
+                          onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className={styles.socialDeleteBtn}
+                          onClick={() => handleRemoveSocialLink(index)}
+                          title="Remove social link"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))
+                  )}
+
+                  <button
+                    type="button"
+                    className={styles.socialAddBtn}
+                    onClick={handleAddSocialLink}
+                  >
+                    <HiOutlinePlus size={14} /> Add Social Link
+                  </button>
                 </div>
               </>
             )}
@@ -908,6 +982,42 @@ export default function EditWebsitePage() {
                         ))}
                       </div>
                     </div>
+
+                    {content.general?.mapLink && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--color-primary)", marginTop: "12px" }}>
+                        <span>📍</span>
+                        <span>Google Maps Location Linked</span>
+                      </div>
+                    )}
+
+                    {socialList && socialList.filter(l => l.url?.trim()).length > 0 && (
+                      <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid var(--color-border-light)" }}>
+                        <div style={{ fontSize: "11px", fontWeight: "700", color: "var(--color-text-tertiary)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>
+                          SOCIAL PROFILES
+                        </div>
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                          {socialList.filter(l => l.url?.trim()).map((l, i) => (
+                            <div
+                              key={i}
+                              style={{
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "50%",
+                                background: "var(--color-background-alt)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: "var(--color-primary)",
+                                border: "1px solid var(--color-border-light)",
+                              }}
+                              title={l.platform}
+                            >
+                              {renderPreviewSocialIcon(l.platform)}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

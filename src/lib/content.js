@@ -20,6 +20,7 @@ export const DEFAULT_CONTENT = {
       { day: "Monday – Saturday", time: "10:00 AM – 8:00 PM" },
       { day: "Sunday", time: "11:00 AM – 6:00 PM" },
     ],
+    socialLinks: [],
   },
   home: {
     heroTagline: "Premium Unisex Salon",

@@ -17,6 +17,7 @@ import {
   FaTwitter,
   FaTiktok,
   FaPinterest,
+  FaLinkedinIn,
   FaGlobe,
 } from "react-icons/fa";
 import styles from "./Footer.module.css";
@@ -43,6 +44,7 @@ function renderFooterSocialIcon(platform) {
     case "twitter": return <FaTwitter size={16} />;
     case "tiktok": return <FaTiktok size={16} />;
     case "pinterest": return <FaPinterest size={16} />;
+    case "linkedin": return <FaLinkedinIn size={16} />;
     default: return <FaGlobe size={16} />;
   }
 }
@@ -80,13 +82,15 @@ export default function Footer() {
       }
 
       // Collect dynamic social links
-      const rawSocial = data?.contact?.socialLinks && data.contact.socialLinks.length > 0
-        ? data.contact.socialLinks
-        : [
-            data?.general?.instagram ? { platform: "instagram", url: data.general.instagram } : null,
-            data?.general?.facebook ? { platform: "facebook", url: data.general.facebook } : null,
-            data?.general?.youtube ? { platform: "youtube", url: data.general.youtube } : null,
-          ].filter(Boolean);
+      const rawSocial = (data?.general?.socialLinks && data.general.socialLinks.length > 0)
+        ? data.general.socialLinks
+        : (data?.contact?.socialLinks && data.contact.socialLinks.length > 0)
+          ? data.contact.socialLinks
+          : [
+              data?.general?.instagram ? { platform: "instagram", url: data.general.instagram } : null,
+              data?.general?.facebook ? { platform: "facebook", url: data.general.facebook } : null,
+              data?.general?.youtube ? { platform: "youtube", url: data.general.youtube } : null,
+            ].filter(Boolean);
 
       const valid = rawSocial
         .map((s) => ({ ...s, safeUrl: getSocialLink(s.platform, s.url) }))
