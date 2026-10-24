@@ -1,6 +1,6 @@
-# Salon Website V1 — Task Tracker
+# Salon Website — Task Tracker
 
-**Current release:** V1 — Public website + owner management web app  
+**Current release:** V1.5 (Released) — Backward-compatible Quality Enhancement Release  
 **Rule:** Mark a task `DONE` only after the result has been verified. `IMPLEMENTED` means code exists but verification is incomplete.
 
 ## Status Legend
