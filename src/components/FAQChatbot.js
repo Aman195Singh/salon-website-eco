@@ -104,7 +104,7 @@ export default function FAQChatbot() {
       qLower.includes("map") ||
       qLower.includes("place")
     ) {
-      return "We are located at 123 Elegance Avenue, Indiranagar, Bengaluru. You can easily view our location on Google Maps from our Contact page.";
+      return "Please visit our Contact page to see our exact salon address and interactive Google Maps directions.";
     }
 
     if (

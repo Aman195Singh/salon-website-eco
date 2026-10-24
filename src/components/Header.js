@@ -14,7 +14,7 @@ import {
   HiOutlineLogout,
   HiOutlineSparkles,
 } from "react-icons/hi";
-import { getPublishedContent } from "@/lib/content";
+import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./Header.module.css";
 
@@ -31,7 +31,7 @@ export default function Header() {
   const router = useRouter();
   const { user, profile, isOwner, signOut } = useAuth();
 
-  const [salonName, setSalonName] = useState("Aura Luxe");
+  const [salonName, setSalonName] = useState(DEFAULT_CONTENT.general.salonName);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);

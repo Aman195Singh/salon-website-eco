@@ -9,13 +9,43 @@ import {
   HiOutlineCheckCircle,
   HiOutlineExclamationCircle,
 } from "react-icons/hi";
-import { FaWhatsapp, FaInstagram, FaFacebookF } from "react-icons/fa";
+import {
+  FaWhatsapp,
+  FaInstagram,
+  FaFacebookF,
+  FaYoutube,
+  FaSnapchatGhost,
+  FaTwitter,
+  FaTiktok,
+  FaPinterest,
+  FaGlobe,
+} from "react-icons/fa";
 import styles from "./contact.module.css";
 
 import { useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
 import { useAuth } from "@/context/AuthContext";
-import { getPhoneLink, getWhatsAppLink, getMailtoLink, getMapLink } from "@/lib/contact";
+import {
+  getPhoneLink,
+  getWhatsAppLink,
+  getMailtoLink,
+  getMapLink,
+  getSocialLink,
+} from "@/lib/contact";
+
+function renderSocialIcon(platform) {
+  switch (platform) {
+    case "instagram": return <FaInstagram size={18} />;
+    case "facebook": return <FaFacebookF size={16} />;
+    case "whatsapp": return <FaWhatsapp size={18} />;
+    case "youtube": return <FaYoutube size={18} />;
+    case "snapchat": return <FaSnapchatGhost size={18} />;
+    case "twitter": return <FaTwitter size={16} />;
+    case "tiktok": return <FaTiktok size={16} />;
+    case "pinterest": return <FaPinterest size={16} />;
+    default: return <FaGlobe size={16} />;
+  }
+}
 
 export default function ContactPage() {
   const { user } = useAuth();
@@ -205,21 +235,43 @@ export default function ContactPage() {
                 </div>
               )}
 
-              {/* Social */}
-              {(contactInfo.instagram || contactInfo.facebook) && (
-                <div className={styles.socialRow}>
-                  {contactInfo.instagram && contactInfo.instagram !== "#" && (
-                    <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Instagram">
-                      <FaInstagram size={18} />
-                    </a>
-                  )}
-                  {contactInfo.facebook && contactInfo.facebook !== "#" && (
-                    <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Facebook">
-                      <FaFacebookF size={16} />
-                    </a>
-                  )}
-                </div>
-              )}
+              {/* Dynamic Social Media Links */}
+              {(() => {
+                const rawLinks = contactPage?.socialLinks && contactPage.socialLinks.length > 0
+                  ? contactPage.socialLinks
+                  : [
+                      contactInfo.instagram ? { platform: "instagram", url: contactInfo.instagram } : null,
+                      contactInfo.facebook ? { platform: "facebook", url: contactInfo.facebook } : null,
+                      contactInfo.youtube ? { platform: "youtube", url: contactInfo.youtube } : null,
+                    ].filter(Boolean);
+
+                const validLinks = rawLinks
+                  .map((item) => ({
+                    ...item,
+                    safeUrl: getSocialLink(item.platform, item.url),
+                  }))
+                  .filter((item) => Boolean(item.safeUrl));
+
+                if (validLinks.length === 0) return null;
+
+                return (
+                  <div className={styles.socialRow}>
+                    {validLinks.map((item, idx) => (
+                      <a
+                        key={idx}
+                        href={item.safeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.socialLink}
+                        aria-label={item.platform || "Social Profile"}
+                        title={item.platform ? item.platform.charAt(0).toUpperCase() + item.platform.slice(1) : "Social Profile"}
+                      >
+                        {renderSocialIcon(item.platform)}
+                      </a>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Right: Enquiry Form */}

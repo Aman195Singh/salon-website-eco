@@ -15,7 +15,19 @@ import {
   HiOutlineLocationMarker,
   HiOutlineClock,
   HiOutlineInformationCircle,
+  HiOutlinePlus,
 } from "react-icons/hi";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaWhatsapp,
+  FaYoutube,
+  FaSnapchatGhost,
+  FaTwitter,
+  FaTiktok,
+  FaPinterest,
+  FaGlobe,
+} from "react-icons/fa";
 import {
   getCMSContent,
   saveDraftContent,
@@ -24,6 +36,20 @@ import {
 } from "@/lib/content";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./edit.module.css";
+
+function renderPreviewSocialIcon(platform) {
+  switch (platform) {
+    case "instagram": return <FaInstagram size={15} />;
+    case "facebook": return <FaFacebookF size={14} />;
+    case "whatsapp": return <FaWhatsapp size={15} />;
+    case "youtube": return <FaYoutube size={15} />;
+    case "snapchat": return <FaSnapchatGhost size={15} />;
+    case "twitter": return <FaTwitter size={14} />;
+    case "tiktok": return <FaTiktok size={14} />;
+    case "pinterest": return <FaPinterest size={14} />;
+    default: return <FaGlobe size={14} />;
+  }
+}
 
 export default function EditWebsitePage() {
   const { user } = useAuth();
@@ -94,6 +120,50 @@ export default function EditWebsitePage() {
       return {
         ...prev,
         about: { ...prev.about, storyParagraphs: newParas },
+      };
+    });
+  };
+
+  // Handle social media links
+  const handleAddSocialLink = () => {
+    setContent((prev) => {
+      const current = prev.contact?.socialLinks || [];
+      return {
+        ...prev,
+        contact: {
+          ...prev.contact,
+          socialLinks: [...current, { platform: "instagram", url: "" }],
+        },
+      };
+    });
+  };
+
+  const handleSocialLinkChange = (index, key, value) => {
+    setContent((prev) => {
+      const current = [...(prev.contact?.socialLinks || [])];
+      if (current[index]) {
+        current[index] = { ...current[index], [key]: value };
+      }
+      return {
+        ...prev,
+        contact: {
+          ...prev.contact,
+          socialLinks: current,
+        },
+      };
+    });
+  };
+
+  const handleRemoveSocialLink = (index) => {
+    setContent((prev) => {
+      const current = [...(prev.contact?.socialLinks || [])];
+      current.splice(index, 1);
+      return {
+        ...prev,
+        contact: {
+          ...prev.contact,
+          socialLinks: current,
+        },
       };
     });
   };
@@ -573,6 +643,64 @@ export default function EditWebsitePage() {
                     }
                   />
                 </div>
+
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Social Media Links</label>
+                  <span className={styles.helperText} style={{ marginBottom: "8px", display: "block" }}>
+                    Add accounts (Instagram, Facebook, WhatsApp, YouTube, Snapchat, etc.). They will appear on the Contact page.
+                  </span>
+
+                  {(!content.contact?.socialLinks || content.contact.socialLinks.length === 0) ? (
+                    <p className={styles.socialEmptyText}>No social media links added yet. Click &quot;+ Add Social Link&quot; below.</p>
+                  ) : (
+                    content.contact.socialLinks.map((item, index) => (
+                      <div key={index} className={styles.socialRowEditor}>
+                        <select
+                          className={styles.socialSelect}
+                          value={item.platform || "instagram"}
+                          onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
+                        >
+                          <option value="instagram">Instagram</option>
+                          <option value="facebook">Facebook</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="youtube">YouTube</option>
+                          <option value="snapchat">Snapchat</option>
+                          <option value="twitter">Twitter / X</option>
+                          <option value="tiktok">TikTok</option>
+                          <option value="pinterest">Pinterest</option>
+                          <option value="website">Other / Website</option>
+                        </select>
+                        <input
+                          type="text"
+                          className={`${styles.input} ${styles.socialInput}`}
+                          placeholder={
+                            item.platform === "whatsapp"
+                              ? "Phone number or https://wa.me/..."
+                              : "https://..."
+                          }
+                          value={item.url || ""}
+                          onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className={styles.socialDeleteBtn}
+                          onClick={() => handleRemoveSocialLink(index)}
+                          title="Remove social link"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))
+                  )}
+
+                  <button
+                    type="button"
+                    className={styles.socialAddBtn}
+                    onClick={handleAddSocialLink}
+                  >
+                    <HiOutlinePlus size={14} /> Add Social Link
+                  </button>
+                </div>
               </>
             )}
           </div>
@@ -968,6 +1096,36 @@ export default function EditWebsitePage() {
                   >
                     {content.contact?.description}
                   </p>
+
+                  {content.contact?.socialLinks && content.contact.socialLinks.filter(l => l.url?.trim()).length > 0 && (
+                    <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid var(--color-border-light)" }}>
+                      <span style={{ fontSize: "11px", fontWeight: "700", color: "var(--color-text-tertiary)", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "10px" }}>
+                        SOCIAL MEDIA PROFILES
+                      </span>
+                      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                        {content.contact.socialLinks.filter(l => l.url?.trim()).map((l, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              width: "36px",
+                              height: "36px",
+                              borderRadius: "50%",
+                              background: "var(--color-background-alt)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "var(--color-primary)",
+                              border: "1px solid var(--color-border-light)",
+                              fontSize: "14px",
+                            }}
+                            title={l.platform}
+                          >
+                            {renderPreviewSocialIcon(l.platform)}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

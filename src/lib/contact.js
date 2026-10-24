@@ -78,3 +78,29 @@ export function getMapLink(url) {
   if (!isValidMapLink(url)) return null;
   return url.trim();
 }
+
+/**
+ * Returns safe formatted URL for a social platform or website.
+ * Prevents javascript: and data: URIs.
+ */
+export function getSocialLink(platform, url) {
+  if (!url || typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === "#" || /x{4,}/i.test(trimmed)) return null;
+
+  // Block dangerous schemes
+  if (/^(javascript:|data:|vbscript:)/i.test(trimmed)) return null;
+
+  if (platform === "whatsapp") {
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    const digits = trimmed.replace(/\D/g, "");
+    return digits.length >= 10 ? `https://wa.me/${digits}` : null;
+  }
+
+  // Prepend https:// if protocol is missing
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+

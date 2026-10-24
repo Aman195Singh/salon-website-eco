@@ -12,6 +12,12 @@ import {
   FaInstagram,
   FaFacebookF,
   FaYoutube,
+  FaWhatsapp,
+  FaSnapchatGhost,
+  FaTwitter,
+  FaTiktok,
+  FaPinterest,
+  FaGlobe,
 } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
@@ -25,7 +31,21 @@ const QUICK_LINKS = [
 
 import { useState, useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
-import { getPhoneLink, getMailtoLink } from "@/lib/contact";
+import { getPhoneLink, getMailtoLink, getSocialLink } from "@/lib/contact";
+
+function renderFooterSocialIcon(platform) {
+  switch (platform) {
+    case "instagram": return <FaInstagram size={18} />;
+    case "facebook": return <FaFacebookF size={16} />;
+    case "whatsapp": return <FaWhatsapp size={18} />;
+    case "youtube": return <FaYoutube size={18} />;
+    case "snapchat": return <FaSnapchatGhost size={18} />;
+    case "twitter": return <FaTwitter size={16} />;
+    case "tiktok": return <FaTiktok size={16} />;
+    case "pinterest": return <FaPinterest size={16} />;
+    default: return <FaGlobe size={16} />;
+  }
+}
 
 export default function Footer() {
   const pathname = usePathname();
@@ -36,11 +56,9 @@ export default function Footer() {
     phone: DEFAULT_CONTENT.general.phone,
     email: DEFAULT_CONTENT.general.email,
     address: DEFAULT_CONTENT.general.address,
-    hours: "Mon – Sat: 10:00 AM – 8:00 PM",
-    instagram: DEFAULT_CONTENT.general.instagram,
-    facebook: DEFAULT_CONTENT.general.facebook,
-    youtube: DEFAULT_CONTENT.general.youtube,
+    hours: "",
   });
+  const [socialLinks, setSocialLinks] = useState([]);
 
   useEffect(() => {
     setYear(new Date().getFullYear().toString());
@@ -48,21 +66,33 @@ export default function Footer() {
       const data = await getPublishedContent();
       if (data?.general) {
         const g = data.general;
-        const hoursStr = g.hours
+        const hoursStr = g.hours && g.hours.length > 0
           ? g.hours.map((h) => `${h.day}: ${h.time}`).join(" | ")
-          : "Mon – Sat: 10:00 AM – 8:00 PM";
+          : "";
         setSalonInfo({
-          name: g.salonName || "Aura Luxe",
-          tagline: g.tagline || "Premium Unisex Salon",
-          phone: g.phone || "+91 98765 43210",
-          email: g.email || "hello@salon.com",
-          address: g.address || "123 Main Street",
+          name: g.salonName || DEFAULT_CONTENT.general.salonName,
+          tagline: g.tagline || DEFAULT_CONTENT.general.tagline,
+          phone: g.phone || "",
+          email: g.email || "",
+          address: g.address || "",
           hours: hoursStr,
-          instagram: g.instagram || "#",
-          facebook: g.facebook || "#",
-          youtube: g.youtube || "#",
         });
       }
+
+      // Collect dynamic social links
+      const rawSocial = data?.contact?.socialLinks && data.contact.socialLinks.length > 0
+        ? data.contact.socialLinks
+        : [
+            data?.general?.instagram ? { platform: "instagram", url: data.general.instagram } : null,
+            data?.general?.facebook ? { platform: "facebook", url: data.general.facebook } : null,
+            data?.general?.youtube ? { platform: "youtube", url: data.general.youtube } : null,
+          ].filter(Boolean);
+
+      const valid = rawSocial
+        .map((s) => ({ ...s, safeUrl: getSocialLink(s.platform, s.url) }))
+        .filter((s) => Boolean(s.safeUrl));
+
+      setSocialLinks(valid);
     }
     loadData();
   }, []);
@@ -82,17 +112,23 @@ export default function Footer() {
             <span className={styles.brandName}>{salonInfo.name}</span>
           </div>
           <p className={styles.tagline}>{salonInfo.tagline}</p>
-          <div className={styles.social}>
-            <a href={salonInfo.instagram} aria-label="Instagram" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-              <FaInstagram size={18} />
-            </a>
-            <a href={salonInfo.facebook} aria-label="Facebook" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-              <FaFacebookF size={16} />
-            </a>
-            <a href={salonInfo.youtube} aria-label="YouTube" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-              <FaYoutube size={18} />
-            </a>
-          </div>
+          {socialLinks.length > 0 && (
+            <div className={styles.social}>
+              {socialLinks.map((s, idx) => (
+                <a
+                  key={idx}
+                  href={s.safeUrl}
+                  aria-label={s.platform || "Social Profile"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                  title={s.platform ? s.platform.charAt(0).toUpperCase() + s.platform.slice(1) : "Social Profile"}
+                >
+                  {renderFooterSocialIcon(s.platform)}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Col 2: Quick Links */}

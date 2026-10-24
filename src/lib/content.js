@@ -44,6 +44,7 @@ export const DEFAULT_CONTENT = {
     title: "Get in Touch",
     description:
       "Have a question or want to book a visit? We would love to hear from you.",
+    socialLinks: [],
   },
 };
 
@@ -70,7 +71,7 @@ export const DEFAULT_SERVICES = [
 
 export const DEFAULT_FAQS = [
   { question: "What are your opening hours?", answer: "We are open Monday to Saturday from 10:00 AM to 8:00 PM, and Sunday from 11:00 AM to 6:00 PM.", category: "general" },
-  { question: "Where is the salon located?", answer: "We are located at 123 Elegance Avenue, Indiranagar, Bengaluru. You can find us easily on Google Maps via the link on our Contact page.", category: "location" },
+  { question: "Where is the salon located?", answer: "Please visit our Contact page to view our exact address and directions on Google Maps.", category: "location" },
   { question: "Do I need an appointment?", answer: "Walk-ins are always welcome! However, we recommend calling ahead or booking for weekends and evenings to minimize your wait time.", category: "general" },
   { question: "What services do you offer?", answer: "We offer comprehensive hair cuts & styling, hair colouring, facials, skin cleanups, party & bridal makeup, men's beard grooming, manicures, and pedicures.", category: "services" },
   { question: "Are services for both men and women?", answer: "Yes! We are a full-service unisex salon with specialized stylists for both men and women.", category: "general" },
