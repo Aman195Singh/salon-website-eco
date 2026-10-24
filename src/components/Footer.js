@@ -25,6 +25,7 @@ const QUICK_LINKS = [
 
 import { useState, useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
+import { getPhoneLink, getMailtoLink } from "@/lib/contact";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -114,22 +115,38 @@ export default function Footer() {
         <div className={styles.col}>
           <h3 className={styles.colTitle}>Contact Us</h3>
           <ul className={styles.contactList}>
-            <li className={styles.contactItem}>
-              <HiOutlinePhone size={16} className={styles.contactIcon} />
-              <a href={`tel:${salonInfo.phone.replace(/\s/g, "")}`}>{salonInfo.phone}</a>
-            </li>
-            <li className={styles.contactItem}>
-              <HiOutlineMail size={16} className={styles.contactIcon} />
-              <a href={`mailto:${salonInfo.email}`}>{salonInfo.email}</a>
-            </li>
-            <li className={styles.contactItem}>
-              <HiOutlineLocationMarker size={16} className={styles.contactIcon} />
-              <span>{salonInfo.address}</span>
-            </li>
-            <li className={styles.contactItem}>
-              <HiOutlineClock size={16} className={styles.contactIcon} />
-              <span>{salonInfo.hours}</span>
-            </li>
+            {salonInfo.phone && (
+              <li className={styles.contactItem}>
+                <HiOutlinePhone size={16} className={styles.contactIcon} />
+                {getPhoneLink(salonInfo.phone) ? (
+                  <a href={getPhoneLink(salonInfo.phone)}>{salonInfo.phone}</a>
+                ) : (
+                  <span>{salonInfo.phone}</span>
+                )}
+              </li>
+            )}
+            {salonInfo.email && (
+              <li className={styles.contactItem}>
+                <HiOutlineMail size={16} className={styles.contactIcon} />
+                {getMailtoLink(salonInfo.email) ? (
+                  <a href={getMailtoLink(salonInfo.email)}>{salonInfo.email}</a>
+                ) : (
+                  <span>{salonInfo.email}</span>
+                )}
+              </li>
+            )}
+            {salonInfo.address && (
+              <li className={styles.contactItem}>
+                <HiOutlineLocationMarker size={16} className={styles.contactIcon} />
+                <span>{salonInfo.address}</span>
+              </li>
+            )}
+            {salonInfo.hours && (
+              <li className={styles.contactItem}>
+                <HiOutlineClock size={16} className={styles.contactIcon} />
+                <span>{salonInfo.hours}</span>
+              </li>
+            )}
           </ul>
         </div>
       </div>

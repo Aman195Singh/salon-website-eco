@@ -6,16 +6,16 @@ import { supabase } from "./supabase";
  */
 export const DEFAULT_CONTENT = {
   general: {
-    salonName: "Aura Luxe Salon",
+    salonName: "Luxury Salon",
     tagline: "Premium Unisex Salon & Spa",
-    phone: "+91 98765 43210",
-    whatsapp: "+91 98765 43210",
-    email: "contact@auraluxesalon.com",
-    address: "123 Elegance Avenue, Indiranagar, Bengaluru, Karnataka — 560038",
-    mapLink: "https://maps.google.com",
-    instagram: "https://instagram.com",
-    facebook: "https://facebook.com",
-    youtube: "https://youtube.com",
+    phone: "",
+    whatsapp: "",
+    email: "",
+    address: "Visit our salon for appointments & consultations.",
+    mapLink: "",
+    instagram: "",
+    facebook: "",
+    youtube: "",
     hours: [
       { day: "Monday – Saturday", time: "10:00 AM – 8:00 PM" },
       { day: "Sunday", time: "11:00 AM – 6:00 PM" },

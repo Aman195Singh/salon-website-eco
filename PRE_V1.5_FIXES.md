@@ -52,7 +52,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Removed fallbacks; verified 0 occurrences via ripgrep |
 | [x] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `SOLVED` | 2026-10-24 | Verified on live DB: Customer A sees own enquiry, Customer B cannot see A's enquiry, updates blocked |
 | [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Added DB constraints, in-memory rate limiter, and honeypot |
-| [ ] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `OPEN` | | |
+| [x] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `SOLVED` | 2026-10-24 | Created contact link validators; Option A neutral placeholders adopted |
 | [ ] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `OPEN` | | |
 | [ ] | FIX-07 | Medium | Dashboard access check is client-side only | `OPEN` | | |
 | [ ] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `OPEN` | | |
@@ -337,20 +337,20 @@ Visitors can tap links that do nothing or open an empty WhatsApp chat, and may b
 4. Do not redesign the pages. Do not add the WhatsApp API or any automation.
 
 **Acceptance criteria**
-- [ ] With empty/placeholder phone, WhatsApp, email and map values: no broken `tel:`, `wa.me`, `mailto:` or `#` link is rendered, and nothing crashes
-- [ ] With valid values: all four actions work
-- [ ] Footer does not crash when `phone` is `null`
-- [ ] Owner decision on invented fallback values recorded
-- [ ] `npm run lint` and `npm run build` pass
+- [x] With empty/placeholder phone, WhatsApp, email and map values: no broken `tel:`, `wa.me`, `mailto:` or `#` link is rendered, and nothing crashes
+- [x] With valid values: all four actions work
+- [x] Footer does not crash when `phone` is `null`
+- [x] Owner decision on invented fallback values recorded (Option A: Safe Neutral Placeholders)
+- [x] `npm run lint` and `npm run build` pass
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Files changed:
-- What was done:
-- Owner decision on `DEFAULT_CONTENT`:
-- Verified how (empty, placeholder and valid values tested):
-- Notes:
+- Status: `SOLVED`
+- Date: 2026-10-24
+- Files changed: `src/lib/contact.js` (created), `src/lib/content.js`, `src/components/Footer.js`, `src/app/contact/page.js`
+- What was done: Built validator helpers in `src/lib/contact.js` (`getPhoneLink`, `getWhatsAppLink`, `getMailtoLink`, `getMapLink`) preventing broken `tel:`, `wa.me/`, `mailto:`, and `#` URLs. Updated `Footer.js` to guard against null phone and only render valid links or text. Updated `contact/page.js` to render links only when values are valid, otherwise rendering text. Updated `DEFAULT_CONTENT` to use safe neutral placeholders (Option A).
+- Owner decision on `DEFAULT_CONTENT`: Option A (Safe Neutral Placeholders) confirmed by owner.
+- Verified how (empty, placeholder and valid values tested): Tested empty, null, placeholder (`+91 XXXXX XXXXX`), `#`, and valid phone/email/URL combinations via automated script; all assertions passed cleanly; lint and production build passed.
+- Notes: All contact actions are protected against crashes and broken links.
 
 ---
 
@@ -507,6 +507,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | 2026-10-24 | FIX-02 | fix-rls.sql, scripts/test-owner.mjs | Removed hardcoded credentials/email, added placeholders | Lint & build pass |
 | 2026-10-24 | FIX-03 | sql/fix-03-customer-enquiries-rls.sql | Added user_id to enquiries, customer RLS policy, and explicit error state | Verified on live DB: SOLVED |
 | 2026-10-24 | FIX-04 | sql/fix-04-database-limits-and-abuse-protection.sql | Added DB constraints, rate limiter, honeypot, and tightened support policy | Lint & build pass |
+| 2026-10-24 | FIX-05 | src/lib/contact.js, content.js, Footer.js, contact/page.js | Added contact helpers, safe links, Option A neutral placeholders | Verified: SOLVED |
 
 ---
 

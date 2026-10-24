@@ -15,6 +15,7 @@ import styles from "./contact.module.css";
 import { useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
 import { useAuth } from "@/context/AuthContext";
+import { getPhoneLink, getWhatsAppLink, getMailtoLink, getMapLink } from "@/lib/contact";
 
 export default function ContactPage() {
   const { user } = useAuth();
@@ -107,62 +108,118 @@ export default function ContactPage() {
               <h2 className={styles.infoTitle}>Reach Us</h2>
 
               <div className={styles.infoList}>
-                <a href={`tel:${contactInfo.phone?.replace(/\s/g, "") || ""}`} className={styles.infoItem}>
-                  <div className={styles.infoIcon}><HiOutlinePhone size={20} /></div>
-                  <div>
-                    <span className={styles.infoLabel}>Phone</span>
-                    <span className={styles.infoValue}>{contactInfo.phone}</span>
-                  </div>
-                </a>
+                {contactInfo.phone && (
+                  getPhoneLink(contactInfo.phone) ? (
+                    <a href={getPhoneLink(contactInfo.phone)} className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlinePhone size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Phone</span>
+                        <span className={styles.infoValue}>{contactInfo.phone}</span>
+                      </div>
+                    </a>
+                  ) : (
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlinePhone size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Phone</span>
+                        <span className={styles.infoValue}>{contactInfo.phone}</span>
+                      </div>
+                    </div>
+                  )
+                )}
 
-                <a href={`https://wa.me/${contactInfo.whatsapp?.replace(/[^0-9]/g, "") || ""}`} target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
-                  <div className={styles.infoIcon} style={{ background: "rgba(37, 211, 102, 0.1)", color: "#25D366" }}><FaWhatsapp size={20} /></div>
-                  <div>
-                    <span className={styles.infoLabel}>WhatsApp</span>
-                    <span className={styles.infoValue}>{contactInfo.whatsapp}</span>
-                  </div>
-                </a>
+                {contactInfo.whatsapp && (
+                  getWhatsAppLink(contactInfo.whatsapp) ? (
+                    <a href={getWhatsAppLink(contactInfo.whatsapp)} target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
+                      <div className={styles.infoIcon} style={{ background: "rgba(37, 211, 102, 0.1)", color: "#25D366" }}><FaWhatsapp size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>WhatsApp</span>
+                        <span className={styles.infoValue}>{contactInfo.whatsapp}</span>
+                      </div>
+                    </a>
+                  ) : (
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoIcon} style={{ background: "rgba(37, 211, 102, 0.1)", color: "#25D366" }}><FaWhatsapp size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>WhatsApp</span>
+                        <span className={styles.infoValue}>{contactInfo.whatsapp}</span>
+                      </div>
+                    </div>
+                  )
+                )}
 
-                <a href={`mailto:${contactInfo.email || ""}`} className={styles.infoItem}>
-                  <div className={styles.infoIcon}><HiOutlineMail size={20} /></div>
-                  <div>
-                    <span className={styles.infoLabel}>Email</span>
-                    <span className={styles.infoValue}>{contactInfo.email}</span>
-                  </div>
-                </a>
+                {contactInfo.email && (
+                  getMailtoLink(contactInfo.email) ? (
+                    <a href={getMailtoLink(contactInfo.email)} className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlineMail size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Email</span>
+                        <span className={styles.infoValue}>{contactInfo.email}</span>
+                      </div>
+                    </a>
+                  ) : (
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlineMail size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Email</span>
+                        <span className={styles.infoValue}>{contactInfo.email}</span>
+                      </div>
+                    </div>
+                  )
+                )}
 
-                <a href={contactInfo.mapLink || "#"} target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
-                  <div className={styles.infoIcon}><HiOutlineLocationMarker size={20} /></div>
-                  <div>
-                    <span className={styles.infoLabel}>Address</span>
-                    <span className={styles.infoValue}>{contactInfo.address}</span>
-                  </div>
-                </a>
+                {contactInfo.address && (
+                  getMapLink(contactInfo.mapLink) ? (
+                    <a href={getMapLink(contactInfo.mapLink)} target="_blank" rel="noopener noreferrer" className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlineLocationMarker size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Address</span>
+                        <span className={styles.infoValue}>{contactInfo.address}</span>
+                      </div>
+                    </a>
+                  ) : (
+                    <div className={styles.infoItem}>
+                      <div className={styles.infoIcon}><HiOutlineLocationMarker size={20} /></div>
+                      <div>
+                        <span className={styles.infoLabel}>Address</span>
+                        <span className={styles.infoValue}>{contactInfo.address}</span>
+                      </div>
+                    </div>
+                  )
+                )}
               </div>
 
               {/* Opening Hours */}
-              <div className={styles.hoursCard}>
-                <div className={styles.hoursHeader}>
-                  <HiOutlineClock size={18} />
-                  <h3 className={styles.hoursTitle}>Opening Hours</h3>
-                </div>
-                {contactInfo.hours?.map((h, i) => (
-                  <div key={i} className={styles.hoursRow}>
-                    <span>{h.day}</span>
-                    <span className={styles.hoursTime}>{h.time}</span>
+              {contactInfo.hours && contactInfo.hours.length > 0 && (
+                <div className={styles.hoursCard}>
+                  <div className={styles.hoursHeader}>
+                    <HiOutlineClock size={18} />
+                    <h3 className={styles.hoursTitle}>Opening Hours</h3>
                   </div>
-                ))}
-              </div>
+                  {contactInfo.hours.map((h, i) => (
+                    <div key={i} className={styles.hoursRow}>
+                      <span>{h.day}</span>
+                      <span className={styles.hoursTime}>{h.time}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Social */}
-              <div className={styles.socialRow}>
-                <a href={contactInfo.instagram || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Instagram">
-                  <FaInstagram size={18} />
-                </a>
-                <a href={contactInfo.facebook || "#"} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Facebook">
-                  <FaFacebookF size={16} />
-                </a>
-              </div>
+              {(contactInfo.instagram || contactInfo.facebook) && (
+                <div className={styles.socialRow}>
+                  {contactInfo.instagram && contactInfo.instagram !== "#" && (
+                    <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Instagram">
+                      <FaInstagram size={18} />
+                    </a>
+                  )}
+                  {contactInfo.facebook && contactInfo.facebook !== "#" && (
+                    <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Facebook">
+                      <FaFacebookF size={16} />
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Right: Enquiry Form */}
