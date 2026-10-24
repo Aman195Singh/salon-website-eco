@@ -47,18 +47,18 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 
 | Done | ID | Severity | Issue | Status | Date | Verified how |
 |---|---|---|---|---|---|---|
-| [ ] | FIX-00 | Blocker | Baseline check and safety checkpoint | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | lint & build pass, all 15 routes 200 OK |
+| [x] | FIX-00 | Blocker | Baseline check and safety checkpoint | `SOLVED` | 2026-10-24 | lint & build pass, all 15 routes 200 OK |
 | [x] | FIX-01 | **Critical / Blocker** | Any logged-in user may be able to make themselves `owner` | `SOLVED` | 2026-10-24 | Verified on live DB: role update rejected ("Changing role is not allowed"), name update succeeded |
-| [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Removed fallbacks; verified 0 occurrences via ripgrep |
-| [x] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `SOLVED` | 2026-10-24 | Verified on live DB: Customer A sees own enquiry, Customer B cannot see A's enquiry, updates blocked |
-| [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Added DB constraints, in-memory rate limiter, and honeypot |
+| [x] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `SOLVED` | 2026-10-24 | Removed fallbacks; verified 0 occurrences via ripgrep; repo confirmed private |
+| [x] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `SOLVED` | 2026-10-24 | Verified on live DB: Customer A sees own enquiry, Customer B cannot see A's enquiry; user_id strictly matched |
+| [x] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `SOLVED` | 2026-10-24 | Added DB constraints, in-memory rate limiter, and honeypot |
 | [x] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `SOLVED` | 2026-10-24 | Created contact link validators; Option A neutral placeholders adopted |
 | [x] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `SOLVED` | 2026-10-24 | Explicit error banner & retry on fetch failure, optimistic update with rollback & alert on status change |
 | [x] | FIX-07 | Medium | Dashboard access check is client-side only | `SOLVED` | 2026-10-24 | Option A approved; RLS blocks non-owners verified via scripts/test-non-owner-access.mjs |
 | [x] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `SOLVED` | 2026-10-24 | Verified zero callers in src; removed route files; lint & build pass |
 | [x] | FIX-09 | Low | Documentation claims do not match the code | `SOLVED` | 2026-10-24 | Updated README.md, CURRENT_STATE.md, TASKS.md to reflect verified codebase |
 
-**Summary counters** (update at the end): Total 10 · Solved 7 · Awaiting verification 3 · Blocked 0 · Open 0
+**Summary counters** (update at the end): Total 10 · Solved 10 · Awaiting verification 0 · Blocked 0 · Open 0
 
 ### Recommended Order
 

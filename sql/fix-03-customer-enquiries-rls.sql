@@ -11,16 +11,14 @@ ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE SET NU
 CREATE INDEX IF NOT EXISTS idx_enquiries_user_id ON public.enquiries(user_id);
 CREATE INDEX IF NOT EXISTS idx_enquiries_email ON public.enquiries(lower(email));
 
--- 3. Customer SELECT policy: Logged-in users can SELECT only enquiries that:
---    a) Match their authenticated user_id, OR
---    b) Match their authenticated email address (case-insensitive)
+-- 3. Customer SELECT policy: Logged-in users can SELECT only enquiries that
+--    match their authenticated user_id. Email matching is removed because
+--    "Confirm email" is OFF in Supabase (email matching would allow viewing other users' enquiries).
 DROP POLICY IF EXISTS "Customers can view own enquiries" ON public.enquiries;
 CREATE POLICY "Customers can view own enquiries" ON public.enquiries
   FOR SELECT
   USING (
-    (auth.uid() IS NOT NULL AND user_id = auth.uid())
-    OR
-    (email IS NOT NULL AND lower(email) = lower(auth.jwt() ->> 'email'))
+    auth.uid() IS NOT NULL AND user_id = auth.uid()
   );
 
 -- 4. Ensure owner policies remain intact

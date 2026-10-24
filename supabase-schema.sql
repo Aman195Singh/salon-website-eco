@@ -241,11 +241,7 @@ CREATE POLICY "Anyone can submit enquiry" ON enquiries
 CREATE POLICY "Only owners can view enquiries" ON enquiries
   FOR SELECT USING (public.is_owner());
 CREATE POLICY "Customers can view own enquiries" ON enquiries
-  FOR SELECT USING (
-    (auth.uid() IS NOT NULL AND user_id = auth.uid())
-    OR
-    (email IS NOT NULL AND lower(email) = lower(auth.jwt() ->> 'email'))
-  );
+  FOR SELECT USING (auth.uid() IS NOT NULL AND user_id = auth.uid());
 CREATE POLICY "Only owners can update enquiries" ON enquiries
   FOR UPDATE USING (public.is_owner());
 
