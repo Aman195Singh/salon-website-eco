@@ -8,11 +8,14 @@ import styles from "./enquiries.module.css";
 export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
+  const [statusAlert, setStatusAlert] = useState(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
   const fetchEnquiries = async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       let query = supabase
         .from("enquiries")
@@ -28,6 +31,7 @@ export default function EnquiriesPage() {
       setEnquiries(data || []);
     } catch (err) {
       console.error("Error fetching enquiries:", err);
+      setLoadError("Unable to load enquiries. Please check your connection or database permissions.");
     } finally {
       setLoading(false);
     }
@@ -38,17 +42,37 @@ export default function EnquiriesPage() {
   }, [statusFilter]);
 
   const updateStatus = async (id, newStatus) => {
+    const prevEnquiries = [...enquiries];
+    const target = enquiries.find((eq) => eq.id === id);
+    if (!target) return;
+
+    // Optimistic update
+    setEnquiries((prev) =>
+      prev.map((eq) => (eq.id === id ? { ...eq, status: newStatus } : eq))
+    );
+    setStatusAlert(null);
+
     try {
       const { error } = await supabase
         .from("enquiries")
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq("id", id);
+
       if (error) throw error;
-      setEnquiries((prev) =>
-        prev.map((eq) => (eq.id === id ? { ...eq, status: newStatus } : eq))
-      );
+
+      setStatusAlert({
+        type: "success",
+        message: `Status updated to "${newStatus}" for ${target.name}.`,
+      });
+      setTimeout(() => setStatusAlert(null), 3500);
     } catch (err) {
       console.error("Error updating status:", err);
+      // Roll back
+      setEnquiries(prevEnquiries);
+      setStatusAlert({
+        type: "error",
+        message: `Failed to update status for ${target.name}: ${err.message || "Network or permission error"}`,
+      });
     }
   };
 
@@ -80,6 +104,20 @@ export default function EnquiriesPage() {
         Manage contact form submissions from visitors.
       </p>
 
+      {/* Status Action Feedback Alert */}
+      {statusAlert && (
+        <div
+          className={
+            statusAlert.type === "success"
+              ? styles.alertBannerSuccess
+              : styles.alertBannerError
+          }
+          role="status"
+        >
+          {statusAlert.message}
+        </div>
+      )}
+
       {/* Filters */}
       <div className={styles.toolbar}>
         <div className={styles.searchWrapper}>
@@ -108,6 +146,17 @@ export default function EnquiriesPage() {
       {/* List */}
       {loading ? (
         <p className={styles.loadingText}>Loading enquiries...</p>
+      ) : loadError ? (
+        <div className={styles.errorBox}>
+          <p>{loadError}</p>
+          <button
+            type="button"
+            onClick={fetchEnquiries}
+            className={styles.retryBtn}
+          >
+            Try Again
+          </button>
+        </div>
       ) : filtered.length === 0 ? (
         <div className={styles.emptyState}>
           <HiOutlineInbox size={40} />

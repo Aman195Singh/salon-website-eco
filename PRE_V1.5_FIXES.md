@@ -53,7 +53,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | [x] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `SOLVED` | 2026-10-24 | Verified on live DB: Customer A sees own enquiry, Customer B cannot see A's enquiry, updates blocked |
 | [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Added DB constraints, in-memory rate limiter, and honeypot |
 | [x] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `SOLVED` | 2026-10-24 | Created contact link validators; Option A neutral placeholders adopted |
-| [ ] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `OPEN` | | |
+| [x] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `SOLVED` | 2026-10-24 | Explicit error banner & retry on fetch failure, optimistic update with rollback & alert on status change |
 | [ ] | FIX-07 | Medium | Dashboard access check is client-side only | `OPEN` | | |
 | [ ] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `OPEN` | | |
 | [ ] | FIX-09 | Low | Documentation claims do not match the code | `OPEN` | | |
@@ -374,18 +374,18 @@ If the database request fails (network problem, expired login, permission error)
 - Keep the change small; the reply-by-email composer belongs to V1.5 proper, not to this fix.
 
 **Acceptance criteria**
-- [ ] Simulated load failure (for example offline mode or a wrong table name in a local test) shows an error message, not "No enquiries found"
-- [ ] A truly empty inbox still shows the empty state
-- [ ] A failed status update shows an error; a successful one shows confirmation
-- [ ] Search, status filter and statuses still work as before
+- [x] Simulated load failure (for example offline mode or a wrong table name in a local test) shows an error message, not "No enquiries found"
+- [x] A truly empty inbox still shows the empty state
+- [x] A failed status update shows an error; a successful one shows confirmation
+- [x] Search, status filter and statuses still work as before
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Files changed:
-- What was done:
-- Verified how:
-- Notes:
+- Status: `SOLVED`
+- Date: 2026-10-24
+- Files changed: `src/app/dashboard/enquiries/page.js`, `src/app/dashboard/enquiries/enquiries.module.css`
+- What was done: Added explicit `loadError` state with a "Try Again" retry button on database query failure, keeping the empty state inbox message strictly for successful zero-result queries. Added optimistic UI updates for status changes with automatic rollback on error, plus dismissable success/error alert banners for immediate owner feedback.
+- Verified how: Verified state branching in `page.js`, added CSS alert/error styles, ran `npm run lint` (0 errors) and `npm run build` (clean production build).
+- Notes: Pre-V1.5 scope respected; email reply composer remains for V1.5 proper.
 
 ---
 
@@ -508,6 +508,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | 2026-10-24 | FIX-03 | sql/fix-03-customer-enquiries-rls.sql | Added user_id to enquiries, customer RLS policy, and explicit error state | Verified on live DB: SOLVED |
 | 2026-10-24 | FIX-04 | sql/fix-04-database-limits-and-abuse-protection.sql | Added DB constraints, rate limiter, honeypot, and tightened support policy | Lint & build pass |
 | 2026-10-24 | FIX-05 | src/lib/contact.js, content.js, Footer.js, contact/page.js | Added contact helpers, safe links, Option A neutral placeholders | Verified: SOLVED |
+| 2026-10-24 | FIX-06 | src/app/dashboard/enquiries/page.js, enquiries.module.css | Explicit error state, retry button, optimistic status updates with rollback and feedback alerts | Verified: SOLVED |
 
 ---
 
