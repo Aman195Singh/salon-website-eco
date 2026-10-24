@@ -35,8 +35,27 @@ import {
   publishContent,
   DEFAULT_CONTENT,
 } from "@/lib/content";
+import {
+  isValidPhone,
+  isValidWhatsApp,
+  isValidEmail,
+  isValidMapLink,
+} from "@/lib/contact";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./edit.module.css";
+
+function isValidSocialUrl(platform, url) {
+  if (!url || !url.trim()) return true;
+  const trimmed = url.trim();
+  if (/x{4,}/i.test(trimmed)) return false;
+  if (/^(javascript:|data:|vbscript:)/i.test(trimmed)) return false;
+  if (platform === "whatsapp") {
+    if (/^https?:\/\//i.test(trimmed)) return /^https?:\/\/wa\.me\/\d{10,15}$/i.test(trimmed);
+    const digits = trimmed.replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 15;
+  }
+  return /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(trimmed);
+}
 
 function renderPreviewSocialIcon(platform) {
   switch (platform) {
@@ -67,6 +86,7 @@ export default function EditWebsitePage() {
 
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
   const [alert, setAlert] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -87,7 +107,22 @@ export default function EditWebsitePage() {
     const isDifferent =
       JSON.stringify(content) !== JSON.stringify(initialContent);
     setHasUnsavedChanges(isDifferent);
-  }, [content, initialContent]);
+    if (isDifferent && (saveStatus === "saved" || saveStatus === "error")) {
+      setSaveStatus("idle");
+    }
+  }, [content, initialContent, saveStatus]);
+
+  // Leave page warning when there are unsaved edits
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasUnsavedChanges]);
 
   // Handle field change
   const handleChange = (section, field, value) => {
@@ -165,9 +200,33 @@ export default function EditWebsitePage() {
     });
   };
 
+  const phoneVal = content.general?.phone?.trim() || "";
+  const phoneError = phoneVal && !isValidPhone(phoneVal) ? "Please enter a valid phone number (at least 7 digits)." : null;
+
+  const whatsappVal = content.general?.whatsapp?.trim() || "";
+  const whatsappError = whatsappVal && !isValidWhatsApp(whatsappVal) ? "Please enter a valid WhatsApp number (10–15 digits)." : null;
+
+  const emailVal = content.general?.email?.trim() || "";
+  const emailError = emailVal && !isValidEmail(emailVal) ? "Please enter a valid email address (e.g. contact@salon.com)." : null;
+
+  const mapLinkVal = content.general?.mapLink?.trim() || "";
+  const mapLinkError = mapLinkVal && !isValidMapLink(mapLinkVal) ? "Please enter a valid map URL starting with https://." : null;
+
+  const socialList = content.general?.socialLinks || content.contact?.socialLinks || [];
+  const hasInvalidSocial = socialList.some((s) => !isValidSocialUrl(s.platform, s.url));
+  const hasValidationErrors = Boolean(phoneError || whatsappError || emailError || mapLinkError || hasInvalidSocial);
+
   // Save Draft
   const handleSaveDraft = async () => {
+    if (hasValidationErrors) {
+      setAlert({
+        type: "error",
+        message: "Please correct the highlighted validation errors before saving.",
+      });
+      return;
+    }
     setSaving(true);
+    setSaveStatus("saving");
     setAlert(null);
     try {
       // Save all modified sections
@@ -176,12 +235,14 @@ export default function EditWebsitePage() {
       }
       setInitialContent(content);
       setHasDrafts(true);
+      setSaveStatus("saved");
       setAlert({
         type: "success",
         message: "Draft saved successfully! These changes are NOT public yet.",
       });
     } catch (err) {
       console.error(err);
+      setSaveStatus("error");
       setAlert({
         type: "error",
         message: "Failed to save draft. Please check your connection or database.",
@@ -193,6 +254,14 @@ export default function EditWebsitePage() {
 
   // Publish
   const handlePublish = async () => {
+    if (hasValidationErrors) {
+      setShowConfirmModal(false);
+      setAlert({
+        type: "error",
+        message: "Please correct the highlighted validation errors before publishing live.",
+      });
+      return;
+    }
     setPublishing(true);
     setAlert(null);
     setShowConfirmModal(false);
@@ -200,6 +269,7 @@ export default function EditWebsitePage() {
       await publishContent(content, user?.id);
       setInitialContent(content);
       setHasDrafts(false);
+      setSaveStatus("published");
       setLastPublished(new Date().toISOString());
       setAlert({
         type: "success",
@@ -207,6 +277,7 @@ export default function EditWebsitePage() {
       });
     } catch (err) {
       console.error(err);
+      setSaveStatus("error");
       setAlert({
         type: "error",
         message: "Failed to publish content. Please check permissions.",
@@ -222,11 +293,10 @@ export default function EditWebsitePage() {
       confirm("Are you sure you want to discard your unsaved edits?")
     ) {
       setContent(initialContent);
+      setSaveStatus("idle");
       setAlert({ type: "success", message: "Edits reverted." });
     }
   };
-
-  const socialList = content.general?.socialLinks || content.contact?.socialLinks || [];
 
   return (
     <div className={styles.container}>
@@ -241,7 +311,19 @@ export default function EditWebsitePage() {
 
         <div className={styles.headerActions}>
           {/* Status Badge */}
-          {hasUnsavedChanges ? (
+          {saving ? (
+            <span className={`${styles.statusBadge} ${styles.statusSaving}`}>
+              <span className={styles.statusDot} /> Saving...
+            </span>
+          ) : publishing ? (
+            <span className={`${styles.statusBadge} ${styles.statusSaving}`}>
+              <span className={styles.statusDot} /> Publishing...
+            </span>
+          ) : saveStatus === "error" ? (
+            <span className={`${styles.statusBadge} ${styles.statusFailed}`}>
+              <span className={styles.statusDot} /> Save Failed
+            </span>
+          ) : hasUnsavedChanges ? (
             <span className={`${styles.statusBadge} ${styles.statusDraft}`}>
               <span className={styles.statusDot} /> Unsaved Edits
             </span>
@@ -414,6 +496,7 @@ export default function EditWebsitePage() {
                       handleChange("general", "phone", e.target.value)
                     }
                   />
+                  {phoneError && <span className={styles.fieldError}>{phoneError}</span>}
                 </div>
 
                 <div className={styles.fieldGroup}>
@@ -426,6 +509,7 @@ export default function EditWebsitePage() {
                       handleChange("general", "whatsapp", e.target.value)
                     }
                   />
+                  {whatsappError && <span className={styles.fieldError}>{whatsappError}</span>}
                 </div>
 
                 <div className={styles.fieldGroup}>
@@ -438,6 +522,7 @@ export default function EditWebsitePage() {
                       handleChange("general", "email", e.target.value)
                     }
                   />
+                  {emailError && <span className={styles.fieldError}>{emailError}</span>}
                 </div>
 
                 <div className={styles.fieldGroup}>
@@ -462,6 +547,7 @@ export default function EditWebsitePage() {
                       handleChange("general", "mapLink", e.target.value)
                     }
                   />
+                  {mapLinkError && <span className={styles.fieldError}>{mapLinkError}</span>}
                   <span className={styles.helperText}>
                     Paste your salon&apos;s Google Maps share link. Tapping the address on Contact page or Footer will open your location.
                   </span>
@@ -510,42 +596,51 @@ export default function EditWebsitePage() {
                     <p className={styles.socialEmptyText}>No social media links added yet. Click &quot;+ Add Social Link&quot; below.</p>
                   ) : (
                     socialList.map((item, index) => (
-                      <div key={index} className={styles.socialRowEditor}>
-                        <select
-                          className={styles.socialSelect}
-                          value={item.platform || "instagram"}
-                          onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
-                        >
-                          <option value="instagram">Instagram</option>
-                          <option value="youtube">YouTube</option>
-                          <option value="whatsapp">WhatsApp</option>
-                          <option value="facebook">Facebook</option>
-                          <option value="snapchat">Snapchat</option>
-                          <option value="twitter">Twitter / X</option>
-                          <option value="tiktok">TikTok</option>
-                          <option value="pinterest">Pinterest</option>
-                          <option value="linkedin">LinkedIn</option>
-                          <option value="website">Other / Website</option>
-                        </select>
-                        <input
-                          type="text"
-                          className={`${styles.input} ${styles.socialInput}`}
-                          placeholder={
-                            item.platform === "whatsapp"
-                              ? "Phone number or https://wa.me/..."
-                              : "https://... (profile or channel link)"
-                          }
-                          value={item.url || ""}
-                          onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
-                        />
-                        <button
-                          type="button"
-                          className={styles.socialDeleteBtn}
-                          onClick={() => handleRemoveSocialLink(index)}
-                          title="Remove social link"
-                        >
-                          ✕
-                        </button>
+                      <div key={index} style={{ marginBottom: "8px" }}>
+                        <div className={styles.socialRowEditor}>
+                          <select
+                            className={styles.socialSelect}
+                            value={item.platform || "instagram"}
+                            onChange={(e) => handleSocialLinkChange(index, "platform", e.target.value)}
+                          >
+                            <option value="instagram">Instagram</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="snapchat">Snapchat</option>
+                            <option value="twitter">Twitter / X</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="pinterest">Pinterest</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="website">Other / Website</option>
+                          </select>
+                          <input
+                            type="text"
+                            className={`${styles.input} ${styles.socialInput}`}
+                            placeholder={
+                              item.platform === "whatsapp"
+                                ? "Phone number or https://wa.me/..."
+                                : "https://... (profile or channel link)"
+                            }
+                            value={item.url || ""}
+                            onChange={(e) => handleSocialLinkChange(index, "url", e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className={styles.socialDeleteBtn}
+                            onClick={() => handleRemoveSocialLink(index)}
+                            title="Remove social link"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        {!isValidSocialUrl(item.platform, item.url) && (
+                          <span className={styles.fieldError}>
+                            {item.platform === "whatsapp"
+                              ? "Please enter a valid WhatsApp number (10–15 digits) or https://wa.me/..."
+                              : "Please enter a valid URL starting with https://"}
+                          </span>
+                        )}
                       </div>
                     ))
                   )}
