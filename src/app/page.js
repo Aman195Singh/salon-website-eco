@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   HiOutlineSparkles,
-  HiOutlineStar,
   HiOutlineArrowRight,
   HiOutlineClock,
   HiOutlineShieldCheck,
@@ -39,24 +38,6 @@ const FEATURES = [
     title: "Flexible Hours",
     description:
       "Convenient appointment options that work with your schedule.",
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Priya S.",
-    text: "Absolutely love the ambiance and the attention to detail. My go-to salon for every occasion!",
-    rating: 5,
-  },
-  {
-    name: "Rahul M.",
-    text: "Best haircut I've ever had. The stylists really listen to what you want and deliver perfectly.",
-    rating: 5,
-  },
-  {
-    name: "Ananya K.",
-    text: "The bridal package was phenomenal. They made me feel like a queen on my special day.",
-    rating: 5,
   },
 ];
 
@@ -193,32 +174,6 @@ export default async function HomePage() {
               View All Services
               <HiOutlineArrowRight size={16} />
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TESTIMONIALS ===== */}
-      <section className={`section ${styles.testimonials}`}>
-        <div className="container">
-          <div className="section-header-center">
-            <span className="section-label">Testimonials</span>
-            <h2 className="section-title">What Our Clients Say</h2>
-          </div>
-
-          <div className={styles.testimonialGrid}>
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className={styles.testimonialCard}>
-                <div className={styles.stars}>
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <HiOutlineStar key={j} size={16} className={styles.star} />
-                  ))}
-                </div>
-                <p className={styles.testimonialText}>
-                  &ldquo;{t.text}&rdquo;
-                </p>
-                <p className={styles.testimonialName}>{t.name}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
