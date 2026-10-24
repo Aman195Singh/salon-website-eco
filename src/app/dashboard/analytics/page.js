@@ -149,8 +149,11 @@ export default function AnalyticsPage() {
             Website traffic, visitor insights, and engagement metrics.
           </p>
         </div>
-        <div className={styles.rangeSelector}>
+        <div className={styles.rangeSelector} role="group" aria-label="Select analytics timeframe">
           <HiOutlineCalendar size={16} />
+          <span style={{ fontSize: "var(--text-xs)", color: "var(--color-text-secondary)", fontWeight: "600", marginRight: "4px" }}>
+            Timeframe:
+          </span>
           {RANGE_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -204,7 +207,8 @@ export default function AnalyticsPage() {
               </div>
               <div>
                 <span className={styles.statValue}>{data.totalViews}</span>
-                <span className={styles.statLabel}>Page Views</span>
+                <span className={styles.statLabel}>Total Page Views</span>
+                <span className={styles.statDesc}>Public page visits</span>
               </div>
             </div>
 
@@ -214,7 +218,8 @@ export default function AnalyticsPage() {
               </div>
               <div>
                 <span className={styles.statValue}>{data.ctaClicks}</span>
-                <span className={styles.statLabel}>CTA Clicks</span>
+                <span className={styles.statLabel}>Button & Link Clicks</span>
+                <span className={styles.statDesc}>Calls, WhatsApp & directions</span>
               </div>
             </div>
 
@@ -226,7 +231,12 @@ export default function AnalyticsPage() {
                 <span className={styles.statValue}>
                   {data.enquirySubmissions}
                 </span>
-                <span className={styles.statLabel}>Enquiry Submissions</span>
+                <span className={styles.statLabel}>Contact Inquiries</span>
+                <span className={styles.statDesc}>
+                  {data.totalViews > 0
+                    ? `${((data.enquirySubmissions / data.totalViews) * 100).toFixed(1)}% conversion`
+                    : "Form submissions"}
+                </span>
               </div>
             </div>
 
@@ -239,6 +249,7 @@ export default function AnalyticsPage() {
                   {data.referrers.length}
                 </span>
                 <span className={styles.statLabel}>Traffic Sources</span>
+                <span className={styles.statDesc}>Channels sending visitors</span>
               </div>
             </div>
           </div>
@@ -246,14 +257,19 @@ export default function AnalyticsPage() {
           {/* Page Views Chart */}
           <div className={styles.chartCard}>
             <div className={styles.chartHeader}>
-              <h2 className={styles.chartTitle}>
-                <HiOutlineChartBar size={18} /> Page Views Over Time
-              </h2>
+              <div>
+                <h2 className={styles.chartTitle}>
+                  <HiOutlineChartBar size={18} /> Daily Page Views
+                </h2>
+                <span style={{ fontSize: "var(--text-xs)", color: "var(--color-text-tertiary)", marginTop: "2px", display: "block" }}>
+                  Tracking daily traffic across the last {range} days
+                </span>
+              </div>
             </div>
 
-            {data.dailyViews.length === 0 ? (
+            {data.totalViews === 0 ? (
               <div className={styles.emptyChart}>
-                <p>No page view data in this period.</p>
+                <p>No website visits recorded in the last {range} days.</p>
               </div>
             ) : (
               <div className={styles.chartContainer}>
