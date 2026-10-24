@@ -8,6 +8,17 @@ const MAX_SUBMISSIONS_PER_WINDOW = 5;
 
 function isRateLimited(ip) {
   const now = Date.now();
+
+  // Clean up expired entries if map grows large to prevent memory leaks
+  if (rateLimitMap.size > 500) {
+    const cutoff = now - RATE_LIMIT_WINDOW_MS;
+    for (const [key, val] of rateLimitMap.entries()) {
+      if (val.startTime < cutoff) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+
   const entry = rateLimitMap.get(ip);
   if (!entry || now - entry.startTime > RATE_LIMIT_WINDOW_MS) {
     rateLimitMap.set(ip, { count: 1, startTime: now });
@@ -65,6 +76,11 @@ export async function POST(request) {
     }
 
     const normalizedEmail = email && typeof email === "string" ? email.trim().toLowerCase() : null;
+    const safeUserId =
+      typeof userId === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId.trim())
+        ? userId.trim()
+        : null;
 
     // Save to Supabase
     const { error } = await supabaseServer.from("enquiries").insert({
@@ -73,7 +89,7 @@ export async function POST(request) {
       email: normalizedEmail,
       message: message.trim(),
       status: "New",
-      user_id: userId || null,
+      user_id: safeUserId,
     });
 
     if (error) {
