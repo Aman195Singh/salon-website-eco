@@ -22,6 +22,7 @@ const RANGE_OPTIONS = [
 export default function AnalyticsPage() {
   const [range, setRange] = useState(30);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const [data, setData] = useState({
     totalViews: 0,
     ctaClicks: 0,
@@ -33,6 +34,7 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const since = new Date();
       since.setDate(since.getDate() - range);
@@ -119,6 +121,7 @@ export default function AnalyticsPage() {
       });
     } catch (err) {
       console.error("Failed to fetch analytics:", err);
+      setLoadError("Unable to load analytics data. Please check your database connection or permissions.");
     } finally {
       setLoading(false);
     }
@@ -161,6 +164,30 @@ export default function AnalyticsPage() {
           ))}
         </div>
       </div>
+
+      {loadError && (
+        <div style={{
+          marginBottom: "var(--space-6)",
+          padding: "var(--space-4) var(--space-6)",
+          background: "rgba(239, 68, 68, 0.1)",
+          border: "1px solid rgba(239, 68, 68, 0.3)",
+          borderRadius: "var(--radius-lg)",
+          color: "var(--color-danger, #ef4444)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "var(--space-4)"
+        }}>
+          <span>{loadError}</span>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={fetchAnalytics}
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <div className={styles.loadingState}>

@@ -21,7 +21,7 @@ export default function LoginPage() {
       if (isOwner) {
         router.push("/dashboard");
       } else {
-        router.push("/");
+        router.push("/account");
       }
     }
   }, [user, isOwner, loading, router]);
@@ -49,8 +49,14 @@ export default function LoginPage() {
   if (loading) {
     return (
       <div className={styles.page}>
-        <div className={styles.card}>
-          <p style={{ textAlign: "center", color: "var(--color-text-secondary)" }}>Loading...</p>
+        <div className={styles.card} style={{ textAlign: "center" }}>
+          <div className={styles.brand}>
+            <span className={styles.brandIcon}>✦</span>
+            <span className={styles.brandName}>Salon</span>
+          </div>
+          <p style={{ color: "var(--color-text-secondary)", marginTop: "var(--space-4)" }}>
+            Checking your session…
+          </p>
         </div>
       </div>
     );

@@ -55,6 +55,7 @@ export default function ContactPage() {
   const [contactPage, setContactPage] = useState(DEFAULT_CONTENT.contact);
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -92,6 +93,7 @@ export default function ContactPage() {
     if (Object.keys(errs).length > 0) return;
 
     setStatus("sending");
+    setErrorMessage("");
     try {
       const res = await fetch("/api/enquiry", {
         method: "POST",
@@ -105,9 +107,12 @@ export default function ContactPage() {
         setStatus("success");
         setForm({ name: "", phone: "", email: "", message: "" });
       } else {
+        const data = await res.json().catch(() => null);
+        setErrorMessage(data?.error || "Something went wrong. Please try again or contact us directly.");
         setStatus("error");
       }
     } catch {
+      setErrorMessage("Unable to connect to server. Please try again or contact us directly.");
       setStatus("error");
     }
   };
@@ -284,16 +289,26 @@ export default function ContactPage() {
               <p className={styles.formDesc}>Fill in the form below and we&apos;ll get back to you as soon as possible.</p>
 
               {status === "success" && (
-                <div className={styles.alert} role="alert">
-                  <HiOutlineCheckCircle size={20} />
-                  <p>Thank you! Your message has been sent. We&apos;ll get back to you soon.</p>
+                <div className={styles.alert} role="alert" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <HiOutlineCheckCircle size={22} />
+                    <p style={{ margin: 0 }}>Thank you! Your message has been sent. We&apos;ll get back to you soon.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setStatus("idle")}
+                    className="btn btn-secondary btn-sm"
+                    style={{ marginTop: "4px" }}
+                  >
+                    Send Another Message
+                  </button>
                 </div>
               )}
 
               {status === "error" && (
                 <div className={`${styles.alert} ${styles.alertError}`} role="alert">
                   <HiOutlineExclamationCircle size={20} />
-                  <p>Something went wrong. Please try again or contact us directly.</p>
+                  <p>{errorMessage || "Something went wrong. Please try again or contact us directly."}</p>
                 </div>
               )}
 

@@ -65,12 +65,8 @@ export default function AccountPage() {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (user.id && user.email) {
-        query = query.or(`user_id.eq.${user.id},email.eq.${user.email.toLowerCase()}`);
-      } else if (user.id) {
+      if (user.id) {
         query = query.eq("user_id", user.id);
-      } else if (user.email) {
-        query = query.eq("email", user.email.toLowerCase());
       }
 
       const { data, error } = await query;
@@ -390,7 +386,7 @@ export default function AccountPage() {
               <div>
                 <h2 className={styles.panelTitle}>My Enquiries & Booking Requests</h2>
                 <p className={styles.panelDesc}>
-                  History of inquiries and service requests submitted with your email address.
+                  History of inquiries and service requests submitted with your account.
                 </p>
 
                 {loadingEnquiries ? (
@@ -412,7 +408,7 @@ export default function AccountPage() {
                 ) : enquiries.length === 0 ? (
                   <div className={styles.emptyState}>
                     <HiOutlineCalendar size={48} style={{ opacity: 0.4, marginBottom: "12px" }} />
-                    <p>No previous inquiries found for {user.email}.</p>
+                    <p>No previous inquiries found for your account.</p>
                     <Link
                       href="/contact"
                       className="btn btn-primary btn-sm"
