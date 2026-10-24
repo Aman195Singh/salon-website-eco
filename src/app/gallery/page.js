@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineX, HiOutlinePhotograph } from "react-icons/hi";
 import styles from "./gallery.module.css";
 
@@ -51,6 +51,18 @@ const GALLERY_IMAGES = [
 
 export default function GalleryPage() {
   const [selected, setSelected] = useState(null);
+
+  // Close lightbox on Escape key for keyboard accessibility
+  useEffect(() => {
+    if (!selected) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelected(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selected]);
 
   return (
     <>

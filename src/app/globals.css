@@ -479,3 +479,42 @@ ul, ol {
   color: var(--color-error);
   margin-top: 2px;
 }
+
+/* Accessibility: Visible Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Accessibility: Skip to Content */
+.skipToContent {
+  position: absolute;
+  top: -120px;
+  left: 16px;
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  z-index: 9999;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: top 0.2s ease;
+  text-decoration: none;
+}
+
+.skipToContent:focus-visible {
+  top: 16px;
+}
+
+/* Accessibility: Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

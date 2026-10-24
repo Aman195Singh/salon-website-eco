@@ -23,6 +23,9 @@ export default function ConditionalLayout({ children }) {
 
   return (
     <>
+      <a href="#main-content" className="skipToContent">
+        Skip to main content
+      </a>
       <Header />
       <main id="main-content" style={{ flex: 1 }}>
         {children}
