@@ -9,7 +9,7 @@ import { supabaseServer } from "@/lib/supabase-server";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, phone, email, message } = body;
+    const { name, phone, email, message, userId } = body;
 
     // Server-side validation
     if (!name || typeof name !== "string" || name.trim().length === 0) {
@@ -29,13 +29,16 @@ export async function POST(request) {
       return NextResponse.json({ error: "Input too long." }, { status: 400 });
     }
 
+    const normalizedEmail = email && typeof email === "string" ? email.trim().toLowerCase() : null;
+
     // Save to Supabase
     const { error } = await supabaseServer.from("enquiries").insert({
       name: name.trim(),
       phone: phone?.trim() || null,
-      email: email?.trim() || null,
+      email: normalizedEmail,
       message: message.trim(),
       status: "New",
+      user_id: userId || null,
     });
 
     if (error) {

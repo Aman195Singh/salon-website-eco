@@ -36,6 +36,7 @@ export default function AccountPage() {
   // Enquiry / Appointment History
   const [enquiries, setEnquiries] = useState([]);
   const [loadingEnquiries, setLoadingEnquiries] = useState(false);
+  const [enquiriesError, setEnquiriesError] = useState(null);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -53,29 +54,43 @@ export default function AccountPage() {
     }
   }, [profile, user]);
 
-  // Fetch enquiries submitted with this email
-  useEffect(() => {
-    async function fetchUserEnquiries() {
-      if (!user?.email) return;
-      setLoadingEnquiries(true);
-      try {
-        const { data, error } = await supabase
-          .from("enquiries")
-          .select("*")
-          .eq("email", user.email)
-          .order("created_at", { ascending: false });
+  // Fetch enquiries submitted with this user_id or email
+  const fetchUserEnquiries = async () => {
+    if (!user) return;
+    setLoadingEnquiries(true);
+    setEnquiriesError(null);
+    try {
+      let query = supabase
+        .from("enquiries")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-        if (!error && data) {
-          setEnquiries(data);
-        }
-      } catch (err) {
-        console.warn("Could not load user enquiries:", err);
-      } finally {
-        setLoadingEnquiries(false);
+      if (user.id && user.email) {
+        query = query.or(`user_id.eq.${user.id},email.eq.${user.email.toLowerCase()}`);
+      } else if (user.id) {
+        query = query.eq("user_id", user.id);
+      } else if (user.email) {
+        query = query.eq("email", user.email.toLowerCase());
       }
-    }
 
-    if (user?.email) {
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Could not load user enquiries:", error);
+        setEnquiriesError("Unable to load your inquiries right now. Please try again.");
+      } else {
+        setEnquiries(data || []);
+      }
+    } catch (err) {
+      console.error("Exception loading user enquiries:", err);
+      setEnquiriesError("An unexpected error occurred while loading inquiries.");
+    } finally {
+      setLoadingEnquiries(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
       fetchUserEnquiries();
     }
   }, [user]);
@@ -380,6 +395,20 @@ export default function AccountPage() {
 
                 {loadingEnquiries ? (
                   <p>Loading your requests...</p>
+                ) : enquiriesError ? (
+                  <div
+                    className={styles.alertError}
+                    style={{ margin: "16px 0", padding: "16px", borderRadius: "8px" }}
+                  >
+                    <p style={{ margin: "0 0 10px 0" }}>{enquiriesError}</p>
+                    <button
+                      type="button"
+                      onClick={fetchUserEnquiries}
+                      className="btn btn-secondary btn-sm"
+                    >
+                      Try Again
+                    </button>
+                  </div>
                 ) : enquiries.length === 0 ? (
                   <div className={styles.emptyState}>
                     <HiOutlineCalendar size={48} style={{ opacity: 0.4, marginBottom: "12px" }} />

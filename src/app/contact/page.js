@@ -14,8 +14,10 @@ import styles from "./contact.module.css";
 
 import { useEffect } from "react";
 import { getPublishedContent, DEFAULT_CONTENT } from "@/lib/content";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ContactPage() {
+  const { user } = useAuth();
   const [contactInfo, setContactInfo] = useState(DEFAULT_CONTENT.general);
   const [contactPage, setContactPage] = useState(DEFAULT_CONTENT.contact);
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
@@ -30,6 +32,16 @@ export default function ContactPage() {
     }
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        name: prev.name || user.user_metadata?.full_name || "",
+        email: prev.email || user.email || "",
+      }));
+    }
+  }, [user]);
 
   const validate = () => {
     const errs = {};
@@ -51,7 +63,10 @@ export default function ContactPage() {
       const res = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          userId: user?.id || null,
+        }),
       });
       if (res.ok) {
         setStatus("success");

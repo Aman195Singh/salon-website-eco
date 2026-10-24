@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS gallery_images (
 -- 7. ENQUIRIES
 CREATE TABLE IF NOT EXISTS enquiries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   name TEXT NOT NULL,
   phone TEXT,
   email TEXT,
@@ -234,17 +235,19 @@ CREATE POLICY "Owners can manage gallery" ON gallery_images
     EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'owner')
   );
 
--- ENQUIRIES: Anyone can insert (contact form); only owners can read/update
+-- ENQUIRIES: Anyone can insert (contact form); owners can read/update; customers can read own
 CREATE POLICY "Anyone can submit enquiry" ON enquiries
   FOR INSERT WITH CHECK (true);
 CREATE POLICY "Only owners can view enquiries" ON enquiries
+  FOR SELECT USING (public.is_owner());
+CREATE POLICY "Customers can view own enquiries" ON enquiries
   FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'owner')
+    (auth.uid() IS NOT NULL AND user_id = auth.uid())
+    OR
+    (email IS NOT NULL AND lower(email) = lower(auth.jwt() ->> 'email'))
   );
 CREATE POLICY "Only owners can update enquiries" ON enquiries
-  FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'owner')
-  );
+  FOR UPDATE USING (public.is_owner());
 
 -- ANALYTICS: Anyone can insert; only owners can read
 CREATE POLICY "Anyone can log analytics" ON analytics_events
