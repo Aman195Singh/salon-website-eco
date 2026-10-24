@@ -83,8 +83,28 @@ export default async function HomePage() {
     featuredServices = DEFAULT_SERVICES.slice(0, 6);
   }
 
+  const general = content.general || {};
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    name: general.salonName || "Salon",
+    ...(general.address ? {
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: general.address,
+      },
+    } : {}),
+    ...(general.phone ? { telephone: general.phone } : {}),
+    ...(general.email ? { email: general.email } : {}),
+    ...(general.mapLink ? { hasMap: general.mapLink } : {}),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ===== HERO SECTION ===== */}
       <section className={styles.hero}>
         <div className={styles.heroOverlay} />

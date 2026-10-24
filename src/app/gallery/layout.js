@@ -1,7 +1,13 @@
 export const metadata = {
   title: "Gallery",
   description:
-    "Browse photos of our salon, our work, and the transformations we create for our clients.",
+    "Browse our luxury salon interior, styling stations, hair transformations, and bridal makeup artistry.",
+  openGraph: {
+    title: "Gallery | Salon",
+    description:
+      "Browse our luxury salon interior, styling stations, and hair transformations.",
+    type: "website",
+  },
 };
 
 export default function GalleryLayout({ children }) {
