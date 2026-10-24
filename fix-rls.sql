@@ -91,14 +91,15 @@ DROP POLICY IF EXISTS "Owners can manage FAQs" ON faq_items;
 CREATE POLICY "Owners can manage FAQs" ON faq_items
   FOR ALL USING (public.is_owner());
 
--- 5. Ensure Aman Singh has the owner role and is confirmed
-UPDATE auth.users 
-SET email_confirmed_at = NOW() 
-WHERE email = 'aman195singh3107@gmail.com';
+-- 5. Helper to ensure owner profile exists and is confirmed.
+-- IMPORTANT: Replace 'YOUR_OWNER_EMAIL_HERE' with your real salon owner email before executing this block.
+-- UPDATE auth.users 
+-- SET email_confirmed_at = NOW() 
+-- WHERE email = 'YOUR_OWNER_EMAIL_HERE';
 
-INSERT INTO public.profiles (id, email, full_name, role)
-SELECT id, email, COALESCE(raw_user_meta_data->>'full_name', 'Aman Singh'), 'owner'
-FROM auth.users
-WHERE email = 'aman195singh3107@gmail.com'
-ON CONFLICT (id) DO UPDATE 
-SET role = 'owner';
+-- INSERT INTO public.profiles (id, email, full_name, role)
+-- SELECT id, email, COALESCE(raw_user_meta_data->>'full_name', 'Salon Owner'), 'owner'
+-- FROM auth.users
+-- WHERE email = 'YOUR_OWNER_EMAIL_HERE'
+-- ON CONFLICT (id) DO UPDATE 
+-- SET role = 'owner';

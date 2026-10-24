@@ -49,7 +49,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 |---|---|---|---|---|---|---|
 | [ ] | FIX-00 | Blocker | Baseline check and safety checkpoint | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | lint & build pass, all 15 routes 200 OK |
 | [x] | FIX-01 | **Critical / Blocker** | Any logged-in user may be able to make themselves `owner` | `SOLVED` | 2026-10-24 | Verified on live DB: role update rejected ("Changing role is not allowed"), name update succeeded |
-| [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `OPEN` | | |
+| [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Removed fallbacks; verified 0 occurrences via ripgrep |
 | [ ] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `OPEN` | | |
 | [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `OPEN` | | |
 | [ ] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `OPEN` | | |
@@ -201,20 +201,20 @@ Note: removing these lines from the files does **not** remove them from Git hist
 5. **Owner action:** set the GitHub repository back to **Private**. Optionally, if a clean history is wanted, discuss creating a fresh repository or rewriting history (**needs owner decision; risky, do not do it without asking**).
 
 **Acceptance criteria**
-- [ ] No personal email in any tracked file
-- [ ] No hardcoded Supabase URL or key in any tracked file
-- [ ] `scripts/test-owner.mjs` still works when env variables are provided
-- [ ] `fix-rls.sql` clearly tells the owner what to replace
+- [x] No personal email in any tracked file
+- [x] No hardcoded Supabase URL or key in any tracked file
+- [x] `scripts/test-owner.mjs` still works when env variables are provided
+- [x] `fix-rls.sql` clearly tells the owner what to replace
 - [ ] Owner confirmed the repo is private again (or decided otherwise)
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Files changed:
-- What was done:
-- Verified how (search results after the change):
-- History clean-up decision: not needed / owner declined / done
-- Notes:
+- Status: `FIXED — AWAITING OWNER VERIFICATION`
+- Date: 2026-10-24
+- Files changed: `fix-rls.sql`, `scripts/test-owner.mjs`
+- What was done: Replaced hardcoded owner email and name with placeholder in `fix-rls.sql`. Removed hardcoded URL, anon key, and email fallback values in `scripts/test-owner.mjs` to strictly require environment variables. Verified that no `.env.local` was ever committed.
+- Verified how (search results after the change): Executed repository-wide searches for `@gmail`, `supabase.co`, and `eyJ` with zero leaked instances in tracked code files; ran `test-owner.mjs` with `--env-file=.env.local` and confirmed it works properly.
+- History clean-up decision: pending owner confirmation on repo privacy status.
+- Notes: Owner should check that the GitHub repository visibility is set to Private.
 
 ---
 
@@ -504,6 +504,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 |---|---|---|---|---|
 | 2026-10-24 | FIX-00 | Branch & baseline commit | Created branch fix/pre-v1.5, ran lint/build, verified routes, created CURRENT_STATE.md | Passed (15 routes 200 OK) |
 | 2026-10-24 | FIX-01 | sql/fix-01-prevent-role-escalation.sql | Added trigger & policy preventing role self-escalation | Verified on live DB: SOLVED |
+| 2026-10-24 | FIX-02 | fix-rls.sql, scripts/test-owner.mjs | Removed hardcoded credentials/email, added placeholders | Lint & build pass |
 
 ---
 

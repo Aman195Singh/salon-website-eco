@@ -1,17 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://njizcequxyqfmbmdmrcs.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qaXpjZXF1eHlxZm1ibWRtcmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2NzgzODUsImV4cCI6MjEwODI1NDM4NX0.SIa4cQUT8TRRmPfqtmww2pPAAmbw8hiWlgthu2Clql4";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("❌ Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function runTests() {
   console.log("=== 1. TESTING OWNER LOGIN ===");
-  const email = process.env.TEST_OWNER_EMAIL || "aman195singh3107@gmail.com";
-  const password = process.env.TEST_OWNER_PASSWORD || "";
+  const email = process.env.TEST_OWNER_EMAIL;
+  const password = process.env.TEST_OWNER_PASSWORD;
 
-  if (!password) {
-    console.log("ℹ️ Provide TEST_OWNER_PASSWORD env variable to run login tests.");
+  if (!email || !password) {
+    console.log("ℹ️ Provide TEST_OWNER_EMAIL and TEST_OWNER_PASSWORD env variables to run login tests.");
     return;
   }
 
