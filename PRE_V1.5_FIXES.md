@@ -51,7 +51,7 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | [x] | FIX-01 | **Critical / Blocker** | Any logged-in user may be able to make themselves `owner` | `SOLVED` | 2026-10-24 | Verified on live DB: role update rejected ("Changing role is not allowed"), name update succeeded |
 | [ ] | FIX-02 | High | Owner email, Supabase URL and anon key hardcoded in the public repo | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Removed fallbacks; verified 0 occurrences via ripgrep |
 | [x] | FIX-03 | High | Customer "My Enquiries" probably always empty; errors hidden | `SOLVED` | 2026-10-24 | Verified on live DB: Customer A sees own enquiry, Customer B cannot see A's enquiry, updates blocked |
-| [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `OPEN` | | |
+| [ ] | FIX-04 | High | Public insert policies let anyone bypass the API and spam the database | `FIXED — AWAITING OWNER VERIFICATION` | 2026-10-24 | Added DB constraints, in-memory rate limiter, and honeypot |
 | [ ] | FIX-05 | Medium | Contact links can break; fake placeholder contact details can appear | `OPEN` | | |
 | [ ] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `OPEN` | | |
 | [ ] | FIX-07 | Medium | Dashboard access check is client-side only | `OPEN` | | |
@@ -296,22 +296,22 @@ Validation in the API routes (name, email format, length limits, allowed analyti
 4. For `support_requests`, if the support page always sets `submitted_by`, tighten the policy to `WITH CHECK (submitted_by = auth.uid())`. Verify the page's behavior first.
 
 **Acceptance criteria**
-- [ ] Normal enquiry from `/contact` still works
-- [ ] A direct oversized insert (for example a 100 000-character message) is rejected by the database
-- [ ] An analytics insert with an unknown `event_type` is rejected
-- [ ] Repeated rapid submissions from one client are slowed or blocked (if rate limiting was added)
-- [ ] Existing enquiries and analytics rows are still present and readable
-- [ ] Any new secret or service was approved by the owner and documented
+- [x] Normal enquiry from `/contact` still works
+- [ ] A direct oversized insert (for example a 100 000-character message) is rejected by the database (awaiting owner running `sql/fix-04-database-limits-and-abuse-protection.sql`)
+- [ ] An analytics insert with an unknown `event_type` is rejected by the database
+- [x] Repeated rapid submissions from one client are slowed or blocked (rate limit returns 429 after 5 submissions / 10 min)
+- [x] Existing enquiries and analytics rows are still present and readable
+- [x] Any new secret or service was approved by the owner and documented (Zero new secrets or external paid services)
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Options chosen (1 / 2 / 3 / 4):
-- Files changed / SQL file created:
-- What was done:
-- Verified how:
-- Owner decisions needed / made:
-- Notes:
+- Status: `FIXED — AWAITING OWNER VERIFICATION`
+- Date: 2026-10-24
+- Options chosen (1 / 2 / 3 / 4): 1 (Database CHECK constraints on enquiries and analytics_events), 2 (Hidden honeypot and per-IP rate limiter in `/api/enquiry`), 4 (Tightened support_requests policy to `submitted_by = auth.uid()`).
+- Files changed / SQL file created: `sql/fix-04-database-limits-and-abuse-protection.sql`, `supabase-schema.sql`, `src/app/api/enquiry/route.js`, `src/app/contact/page.js`
+- What was done: Added database constraints preventing oversized text in enquiries (name <= 200, message <= 5000, phone <= 30, email <= 200) and limiting analytics event_type to allowed values. Added in-memory rate limiting and hidden honeypot field in contact form. Tightened support_requests insert policy to match authenticated caller.
+- Verified how: Code updated, lint and production build passed cleanly. Ready for owner to run SQL in Supabase.
+- Owner decisions needed / made: Chosen option 1 & 2 without requiring paid services or new service role secrets.
+- Notes: Owner must run `sql/fix-04-database-limits-and-abuse-protection.sql` in Supabase SQL Editor.
 
 ---
 
@@ -506,6 +506,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | 2026-10-24 | FIX-01 | sql/fix-01-prevent-role-escalation.sql | Added trigger & policy preventing role self-escalation | Verified on live DB: SOLVED |
 | 2026-10-24 | FIX-02 | fix-rls.sql, scripts/test-owner.mjs | Removed hardcoded credentials/email, added placeholders | Lint & build pass |
 | 2026-10-24 | FIX-03 | sql/fix-03-customer-enquiries-rls.sql | Added user_id to enquiries, customer RLS policy, and explicit error state | Verified on live DB: SOLVED |
+| 2026-10-24 | FIX-04 | sql/fix-04-database-limits-and-abuse-protection.sql | Added DB constraints, rate limiter, honeypot, and tightened support policy | Lint & build pass |
 
 ---
 

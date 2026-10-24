@@ -100,10 +100,10 @@ CREATE TABLE IF NOT EXISTS gallery_images (
 CREATE TABLE IF NOT EXISTS enquiries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  name TEXT NOT NULL,
-  phone TEXT,
-  email TEXT,
-  message TEXT NOT NULL,
+  name TEXT NOT NULL CHECK (char_length(name) BETWEEN 1 AND 200),
+  phone TEXT CHECK (phone IS NULL OR char_length(phone) <= 30),
+  email TEXT CHECK (email IS NULL OR char_length(email) <= 200),
+  message TEXT NOT NULL CHECK (char_length(message) BETWEEN 1 AND 5000),
   status TEXT NOT NULL DEFAULT 'New' CHECK (status IN ('New', 'In Progress', 'Resolved')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -112,8 +112,8 @@ CREATE TABLE IF NOT EXISTS enquiries (
 -- 8. ANALYTICS EVENTS
 CREATE TABLE IF NOT EXISTS analytics_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  event_type TEXT NOT NULL,  -- 'page_view', 'cta_click', 'enquiry_submit'
-  page_path TEXT,
+  event_type TEXT NOT NULL CHECK (event_type IN ('page_view', 'cta_click', 'enquiry_submit')),
+  page_path TEXT CHECK (page_path IS NULL OR char_length(page_path) <= 500),
   referrer TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -259,7 +259,7 @@ CREATE POLICY "Only owners can view analytics" ON analytics_events
 
 -- SUPPORT REQUESTS: Authenticated users can insert; owners can read all
 CREATE POLICY "Authenticated can submit support" ON support_requests
-  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL AND submitted_by = auth.uid());
 CREATE POLICY "Owners can view all support requests" ON support_requests
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'owner')

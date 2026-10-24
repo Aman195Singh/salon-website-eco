@@ -186,6 +186,17 @@ export default function ContactPage() {
 
               {status !== "success" && (
                 <form onSubmit={handleSubmit} noValidate className={styles.form}>
+                  {/* Honeypot field for spam bots */}
+                  <input
+                    type="text"
+                    name="_hp_company"
+                    value={form._hp_company || ""}
+                    onChange={handleChange("_hp_company")}
+                    style={{ display: "none" }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
                   <div className="form-group">
                     <label htmlFor="contact-name" className="form-label">Your Name *</label>
                     <input

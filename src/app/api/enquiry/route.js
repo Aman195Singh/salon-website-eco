@@ -1,6 +1,25 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 
+// Simple in-memory rate limiter (Max 5 submissions per 10 minutes per IP)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_SUBMISSIONS_PER_WINDOW = 5;
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now - entry.startTime > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { count: 1, startTime: now });
+    return false;
+  }
+  if (entry.count >= MAX_SUBMISSIONS_PER_WINDOW) {
+    return true;
+  }
+  entry.count += 1;
+  return false;
+}
+
 /**
  * POST /api/enquiry
  * Accepts contact form submissions from the public Contact page.
@@ -8,7 +27,23 @@ import { supabaseServer } from "@/lib/supabase-server";
  */
 export async function POST(request) {
   try {
+    const forwarded = request.headers.get("x-forwarded-for");
+    const clientIp = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
+
+    if (isRateLimited(clientIp)) {
+      return NextResponse.json(
+        { error: "Too many submissions from your connection. Please wait a few minutes before trying again." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
+
+    // Honeypot check: if bot filled hidden field, drop silently without DB insert
+    if (body._hp_company && body._hp_company.trim().length > 0) {
+      return NextResponse.json({ success: true, message: "Enquiry submitted successfully." });
+    }
+
     const { name, phone, email, message, userId } = body;
 
     // Server-side validation
