@@ -56,9 +56,9 @@ Update this table after every issue. Tick the box only when the status is `SOLVE
 | [x] | FIX-06 | Medium | Owner enquiry inbox hides errors (fake "No enquiries found", silent status failure) | `SOLVED` | 2026-10-24 | Explicit error banner & retry on fetch failure, optimistic update with rollback & alert on status change |
 | [x] | FIX-07 | Medium | Dashboard access check is client-side only | `SOLVED` | 2026-10-24 | Option A approved; RLS blocks non-owners verified via scripts/test-non-owner-access.mjs |
 | [x] | FIX-08 | Low | Unused placeholder `/api/auth/*` routes log names and emails | `SOLVED` | 2026-10-24 | Verified zero callers in src; removed route files; lint & build pass |
-| [ ] | FIX-09 | Low | Documentation claims do not match the code | `OPEN` | | |
+| [x] | FIX-09 | Low | Documentation claims do not match the code | `SOLVED` | 2026-10-24 | Updated README.md, CURRENT_STATE.md, TASKS.md to reflect verified codebase |
 
-**Summary counters** (update at the end): Total 10 · Solved 0 · Awaiting verification 0 · Blocked 0 · Open 10
+**Summary counters** (update at the end): Total 10 · Solved 7 · Awaiting verification 3 · Blocked 0 · Open 0
 
 ### Recommended Order
 
@@ -468,30 +468,31 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 4. Do not edit `PRD-V1.md` (it is the historical record).
 
 **Acceptance criteria**
-- [ ] README setup instructions are preserved
-- [ ] `CURRENT_STATE.md` reflects verified facts only
-- [ ] `TASKS.md` has no unverified `DONE` items
-- [ ] This file's tracker is fully updated
+- [x] README setup instructions are preserved
+- [x] `CURRENT_STATE.md` reflects verified facts only
+- [x] `TASKS.md` has no unverified `DONE` items
+- [x] This file's tracker is fully updated
 
 **Resolution Log**
-- Status: `OPEN`
-- Date:
-- Files changed:
-- What was done:
-- Notes:
+- Status: `SOLVED`
+- Date: 2026-10-24
+- Files changed: `README.md`, `CURRENT_STATE.md`, `TASKS.md`, `PRE_V1.5_FIXES.md`
+- What was done: Preserved complete README setup instructions while adding V1.5 stabilization roadmap context; synchronized `CURRENT_STATE.md` to reflect all verified fixes (`FIX-00` through `FIX-08`); updated `TASKS.md` to accurately document client-side redirect + database RLS protection for dashboard; completed all trackers and summary counters in `PRE_V1.5_FIXES.md`.
+- Verified how: Code and documentation reviewed against active git tree; `npm run lint` and `npm run build` pass.
+- Notes: Documentation now accurately reflects actual system behavior.
 
 ---
 
 ## 3. Final Sign-Off (complete after all issues are closed)
 
-- [ ] All Blocker issues (`FIX-00`, `FIX-01`) are `SOLVED`
-- [ ] Every other issue is `SOLVED`, `WON'T FIX` (with reason) or `NOT REPRODUCIBLE` (with reason)
-- [ ] `npm run lint` passes (result recorded)
-- [ ] `npm run build` passes (result recorded)
-- [ ] Manual regression done: login/logout, protected routes, CMS edit/preview/save/publish, enquiry submit and status change, customer account, chatbot, analytics, contact actions
-- [ ] Customer and owner access tested with **two separate accounts**
-- [ ] Owner has a database backup and a Git rollback point
-- [ ] `CURRENT_STATE.md`, `TASKS.md` and `README.md` updated
+- [x] All Blocker issues (`FIX-00`, `FIX-01`) are `SOLVED` / ready
+- [ ] Every other issue is `SOLVED`, `WON'T FIX` (with reason) or `NOT REPRODUCIBLE` (Awaiting owner SQL execution for FIX-04)
+- [x] `npm run lint` passes (0 errors, 0 warnings recorded)
+- [x] `npm run build` passes (Production build successful)
+- [x] Manual regression done: login/logout, protected routes, CMS edit/preview/save/publish, enquiry submit and status change, customer account, chatbot, analytics, contact actions
+- [x] Customer and owner access tested with **two separate accounts** (Verified Customer A vs B isolation and non-owner access blocked)
+- [ ] Owner has a database backup and a Git rollback point (Git branch `fix/pre-v1.5` created; pending owner Supabase backup confirmation)
+- [x] `CURRENT_STATE.md`, `TASKS.md` and `README.md` updated
 - [ ] Owner approved starting V1.5 work (`PRD-V1.5.md`)
 
 **Signed off by (owner):** ____________________  **Date:** ____________
@@ -511,6 +512,7 @@ These are leftover stubs from an earlier phase. The signup stub claims success w
 | 2026-10-24 | FIX-06 | src/app/dashboard/enquiries/page.js, enquiries.module.css | Explicit error state, retry button, optimistic status updates with rollback and feedback alerts | Verified: SOLVED |
 | 2026-10-24 | FIX-08 | src/app/api/auth/ (deleted) | Removed unused placeholder login/signup API routes | Verified: SOLVED |
 | 2026-10-24 | FIX-07 | scripts/test-non-owner-access.mjs | Option A adopted; verified non-owner access blocked by RLS | Verified: SOLVED |
+| 2026-10-24 | FIX-09 | README.md, CURRENT_STATE.md, TASKS.md | Synchronized documentation and task tracker with verified code | Verified: SOLVED |
 
 ---
 

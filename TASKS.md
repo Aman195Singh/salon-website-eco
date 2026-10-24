@@ -43,9 +43,9 @@
 
 - [x] Configure approved authentication provider. (`DONE`)
 - [x] Implement secure login/logout and reset flow if supported. (`DONE`)
-- [x] Implement controlled owner provisioning. (`DONE` - Role user by default, manual owner promotion)
-- [x] Protect dashboard routes and server-side operations. (`DONE`)
-- [x] Test unauthorized access. (`DONE` - Redirects to login)
+- [x] Implement controlled owner provisioning. (`DONE` - Role user by default, manual owner promotion; trigger blocks self-promotion `FIX-01`)
+- [x] Protect dashboard routes and database operations. (`DONE` - Client-side navigation redirect in layout + Row Level Security in Supabase database verified via automated test script `FIX-07`)
+- [x] Test unauthorized access. (`DONE` - Non-owner access blocked by RLS returning 0 rows / error on owner tables, redirected to login on dashboard `FIX-07`)
 
 ## Phase 3 — CMS and Live Preview
 
@@ -85,7 +85,7 @@
 - [x] Review environment variables, secrets, backups, and deployment settings. (`DONE`)
 - [x] Owner reviews, stages, and pushes code to GitHub repository (Aman195Singh/salon-website-eco). (`DONE`)
 - [ ] Deploy and verify live public and owner flows (e.g. Vercel). (`TODO`)
-- [ ] Record known limitations and release notes. (`DONE`)
+- [x] Record known limitations and release notes. (`DONE` - Documented in PRE_V1.5_FIXES.md and CURRENT_STATE.md)
 
 ## Blockers / Decisions Resolved
 

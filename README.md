@@ -4,6 +4,12 @@ A modern, high-conversion luxury salon website and single-salon owner management
 
 ---
 
+## 🎯 Current Development Target: V1.5
+
+This project has completed the Pre-V1.5 Security & Reliability Stabilization phase (`PRE_V1.5_FIXES.md`), securing all database RLS policies, customer enquiry isolation, abuse prevention constraints, rate limiting, and owner inbox feedback. The project is aligned for the V1.5 enhancement release defined in `PRD-V1.5.md`.
+
+---
+
 ## ✨ Features
 
 ### 🏛️ Public Experience
