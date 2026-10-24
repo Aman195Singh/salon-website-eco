@@ -217,10 +217,15 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className={styles.bottom}>
-        <div className="container">
+        <div className={`container ${styles.bottomInner}`}>
           <p className={styles.copyright}>
             © {year} {salonInfo.name}. All rights reserved.
           </p>
+          <div className={styles.bottomLinks}>
+            <Link href="/privacy">Privacy Policy</Link>
+            <span>•</span>
+            <Link href="/terms">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>
