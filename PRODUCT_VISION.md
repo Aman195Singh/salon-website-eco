@@ -1,9 +1,9 @@
 # Product Vision — Salon Business Automation
 
-**Document status:** Baseline  
-**Current product:** Salon Website + Owner Management Web App  
-**Current release:** V1  
-**Last updated:** 2026-10-22
+**Document status:** Authoritative Product Vision  
+**Current product:** Salon Website + Owner Management Web App + Operations  
+**Current release target:** V2 — Phase 1: Appointment Booking Management MVP  
+**Last updated:** 2026-10-25
 
 ## 1. Long-Term Vision
 
@@ -15,11 +15,11 @@ The salon and beauty industry is the first pilot. Start with one salon and learn
 
 ## 3. Product Evolution
 
-- **V1 — Salon website + basic owner web app:** Public pages, controlled owner authentication, structured content editing with live preview and draft/publish, enquiry management, basic analytics, a simple FAQ chatbot, and developer support requests.
-- **V2 — Improve and validate:** Improve the product based on real owner/customer feedback; consider more robust content history, richer analytics, operational workflows, and integrations only when justified.
-- **Later versions:** Consider salon workflows and automation, reusable solutions for multiple salons, and other MSME industries when justified by validated needs.
+- **V1 / V1.5 — Salon website + owner management app (Released):** Public pages, controlled owner authentication, structured content editing with live preview and draft/publish, enquiry management, basic analytics, FAQ chatbot, and developer support. V1.5 added responsive mobile polish, email composer, CMS safety, RLS hardening, and legal pages.
+- **V2 — Business Operations and Automation (Active):** Operational salon workflows starting with Appointment Booking Management MVP (`PRD-V2.md`), followed by payment integration, WhatsApp messaging, and customer CRM.
+- **Later versions:** Multi-salon tenancy, reusable solutions across multiple salons and MSME industries.
 
-These are future directions, not commitments to implement now. Multi-salon SaaS and subscription billing are not part of V1. Each release must have its own approved scope and acceptance criteria.
+These are progressive milestones with strict release boundaries. Multi-salon SaaS and subscription billing are future directions. Each release must have its own approved scope and acceptance criteria.
 
 ## 4. Product Principles
 

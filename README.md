@@ -1,12 +1,13 @@
-# 🌟 Luxury Salon Website & Management Web App (V1.5)
+# 🌟 Luxury Salon Website & Management Web App
 
 A modern, high-conversion luxury salon website and single-salon owner management system built with **Next.js (App Router)** and **Supabase**.
 
 ---
 
-## 🎯 Current Release: V1.5 (Released)
+## 🎯 Current Target: V2 — Appointment Booking Management (Phase 1 Complete)
 
-This project has completed both the Pre-V1.5 Stabilization phase (`PRE_V1.5_FIXES.md`) and the full **V1.5 Quality Enhancement Release** (`PRD-V1.5.md`). All features across responsiveness, enquiry management, email composer, CMS usability, security, SEO, accessibility, legal pages, and analytics readability are implemented, verified, and released. See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md` for full verification details.
+- **V2 Phase 1 Release (Ready for Merge):** In-person appointment booking wizard (`/book`), customer self-service portal (`/book/manage`), registered customer appointments (`/account`), specialist chair-side portal (`/staff/appointments`), owner calendar (`/dashboard/appointments`), workforce HR & payroll suite (`/dashboard/staff`), customer directory (`/dashboard/customers`), operation management hub (`/dashboard/operations`), and async notification outbox. See formal [V2 Phase 1 Release Report](file:///c:/Users/Aman%20Singh/OneDrive/Desktop/salon-website-eco/docs/V2_PHASE1_RELEASE_REPORT.md).
+- **V1.5 Quality Baseline:** Released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. Preserved in `docs/archive/V1.5_RELEASE_REPORT.md`.
 
 ---
 
@@ -97,9 +98,10 @@ npm run build
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure & Documentation
 
 ```
+├── docs/                   # Guides (Hindi onboarding, prompts) and archive (V1/V1.5 PRDs & logs)
 ├── public/                 # Static images, luxury photos & icons
 ├── scripts/                # Verification and QA automation scripts
 ├── src/
@@ -114,7 +116,9 @@ npm run build
 │   ├── components/         # Header, Footer, FAQChatbot, Live Preview
 │   └── lib/                # Supabase client, Content helpers, Analytics
 ├── supabase-schema.sql     # Complete database schema and RLS policies
-├── PRD-V1.md               # Product Requirements Document (V1 Scope)
+├── AGENTS.md               # Safety rules and AI implementation guardrails
+├── PRD-V2.md               # Active Product Requirements Document (V2 Booking MVP)
+├── TASKS.md                # Task list and implementation progress
 ├── DESIGN.md               # Design System and visual guidelines
 └── README.md               # Project documentation
 ```

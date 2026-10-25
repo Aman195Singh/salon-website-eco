@@ -1,6 +1,6 @@
 # Salon Website — Task Tracker
 
-**Current release:** V1.5 (Released) — Backward-compatible Quality Enhancement Release  
+**Current release:** V2 — Phase 1: Appointment Booking Management MVP (V1.5 Released)  
 **Rule:** Mark a task `DONE` only after the result has been verified. `IMPLEMENTED` means code exists but verification is incomplete.
 
 ## Status Legend
@@ -104,6 +104,67 @@
 - [x] V15-13: Analytics readability, descriptive metric subtitles, timeframe label, and empty states. (`DONE`)
 - [x] V15-14: Full regression, RLS test script verification, and release documentation. (`DONE`)
 
+## Phase 8 — V2 Appointment Booking Management MVP (Active)
+
+Authorizing PRD: `PRD-V2.md`
+
+### 8.0 Documentation & Safety Architecture
+- [x] V2-00: Audit repository and organize V2 booking blueprint. (`DONE`)
+- [x] V2-01: Establish `PRD-V2.md` as single source of truth for V2 booking requirements. (`DONE`)
+- [x] V2-02: Update `AGENTS.md`, `VERSION_ROADMAP.md`, `CURRENT_STATE.md`, and `DESIGN.md`. (`DONE`)
+
+### 8.1 Database Schema & Migration Foundation
+- [x] V2-03: Create migration for `staff`, `staff_services`, `staff_working_hours`, `staff_breaks`, and `staff_time_off` (`sql/v2-01-staff-and-working-hours.sql`). (`DONE`)
+- [x] V2-04: Create migration for `customers`, `appointments`, `appointment_services` (snapshots), `appointment_events`, and `notification_jobs` (`sql/v2-02-appointments-and-snapshots.sql`). (`DONE`)
+- [x] V2-05: Add foreign keys, check constraints, indexes, and PostgreSQL exclusion (`EXCLUDE USING gist`) conflict rules. (`DONE`)
+- [x] V2-06: Implement and test Row Level Security (RLS) policies for all new booking tables (`sql/v2-03-booking-rls-policies.sql` & `scripts/test-booking-rls.mjs`). (`DONE`)
+
+### 8.2 Availability Calculation Engine
+- [x] V2-07: Implement pure slot calculation module (`src/lib/booking/availability.js`) supporting durations, buffers, working hours, breaks, time off, and notice window. (`DONE`)
+- [x] V2-08: Add unit and boundary tests for slot calculation (`scripts/test-availability.mjs`). (`DONE`)
+- [x] V2-09: Build availability server API endpoint (`GET /api/booking/availability`). (`DONE`)
+
+### 8.3 Booking Write Path & Concurrency Protection
+- [x] V2-10: Implement server booking creation transaction with canonical price/duration lookup and snapshot persistence (`src/app/api/booking/route.js`). (`DONE`)
+- [x] V2-11: Add idempotency handling and secure random public booking reference generation. (`DONE`)
+- [x] V2-12: Write automated concurrency test (`scripts/test-booking-concurrency.mjs`) verifying exactly 1 of 20+ parallel requests succeeds. (`DONE` - 20 concurrent requests verified: 1 success, 19 conflict 409s)
+
+### 8.4 Customer Booking Journey
+- [x] V2-13: Build mobile-first customer booking page (`/book`) with service, staff, date, and slot selection. (`DONE`)
+- [x] V2-14: Implement customer review, details form, loading, empty, slot-taken, and success states (`src/app/book/page.js`). (`DONE`)
+- [x] V2-15: Implement customer self-service cancellation and reschedule flows (`/book/manage` with cutoff enforced). (`DONE`)
+
+### 8.5 Owner & Staff Appointment Operations
+- [x] V2-16: Build owner calendar and appointment list view (`/dashboard/appointments`) with status/date/staff filters. (`DONE`)
+- [x] V2-17: Implement operational status transitions (`arrived`, `in_service`, `completed`, `cancelled`, `no_show`) and status API (`/api/booking/status`). (`DONE`)
+- [x] V2-18: Build staff management and schedule/leave editor (`/dashboard/staff`). (`DONE` - Specialist profiles, 7-day working hours editor, lunch breaks, and planned absences verified via `scripts/test-staff-management.mjs`)
+
+### 8.6 Notifications, Hardening & Final Verification
+- [x] V2-19: Implement transactional outbox processor for asynchronous booking confirmations and reminders (`src/lib/booking/outbox-processor.js`, `/api/booking/notifications`). (`DONE` - Outbox queue, batch processor, retry backoff, and decoupling verified via `scripts/test-notification-outbox.mjs`)
+- [x] V2-20: Add rate limiting, abuse protection, security headers, and honeypot (`src/app/api/booking/route.js`, `next.config.mjs`). (`DONE`)
+- [x] V2-21: Full regression testing: V1.5 public pages, CMS editor, enquiries, customer account, build (31 routes), and lint. (`DONE` - Full test suite passed across all 7 test scripts)
+- [x] V2-22: Registered customer account appointment view (`/account` appointments tab) with live booking history and manage links (`src/app/account/page.js`, PRD-V2 §2.2). (`DONE`)
+- [x] V2-23: Specialist chair-side operational portal (`/staff/appointments`) with instant status transitions (`arrived`, `in_service`, `completed`, `no_show`) without owner revenue disclosure (PRD-V2 §2.3). (`DONE`)
+- [x] V2-24: Policy cutoff alignment (4 hours for online cancellation) and reschedule abuse protection (max 2 changes) per PRD-V2 §6.2, §12.1, and Table 11 Item 9. (`DONE`)
+
+### 8.7 Salon Staff HR, Attendance, Payroll & Recruitment Suite
+- [x] V2-25: Create additive database migration `sql/v2-04-staff-hr-and-payroll.sql` (`staff` HR fields, `staff_attendance`, `staff_payroll`, `staff_recruitment`, updated_at triggers, owner RLS policies). (`DONE`)
+- [x] V2-26: Build dedicated staff HR APIs: attendance marking (`/api/staff/hr/attendance`), payroll & commission calculator (`/api/staff/hr/payroll`), hiring pipeline (`/api/staff/hr/recruitment`), and resignation/termination handler (`/api/staff/hr/exit`). (`DONE`)
+- [x] V2-27: Implement comprehensive Salon HR Portal UI in `/dashboard/staff` with 7 dedicated tabs (HR Overview & Metrics, Staff 360° Profiles, Attendance Roster, Salary & Commissions, Hiring Kanban Board, Shifts, and Leaves) and modern dark luxury styling. (`DONE`)
+- [x] V2-28: Automated QA verification (`scripts/test-staff-hr.mjs`) with 18 passing assertions, zero build regressions across 39 production routes. (`DONE`)
+
+### 8.8 Targeted UI/UX Visual Improvements & Audit (Issues A, B, C)
+- [x] V2-29: Issue A — Landing Page Header & Navigation Polish: clean 5-item desktop nav, prominent "Book Appointment" CTA button with calendar icon, owner badge access, and responsive mobile drawer at 390px. (`DONE`)
+- [x] V2-30: Issue B — Light Theme for `/book` and `/staff/appointments`: replaced dark backgrounds (`#0d0b0a`, `#0f0f13`) with warm off-white (`#FDFBF8`), white cards, and accessible typography using existing design tokens. (`DONE`)
+- [x] V2-31: Issue C — Contrast & Readability for `/dashboard/appointments` and `/dashboard/staff`: replaced dark card boxes (`rgba(26,23,22,0.7)`) and faint text (`#f7f5f0`, `#a8a29e`) with high-contrast surfaces (`#FFFFFF`), readable dark headings (`#2C2419`), and accessible status badges. (`DONE`)
+- [x] V2-32: Visual verification via automated browser subagent screenshots and `next build` validation (all 39 routes compile cleanly in 22.8s, exit code 0). (`DONE`)
+
+### 8.9 Salon Admin Operation Management & Customer Suite
+- [x] V2-33: Reorganize Admin Panel sidebar into exact approved order: 6 Main Management Modules (Overview, Analytics, Appointment Management, Customer Management, Staff Management HR, Operation Management), subtle separator divider, and 5 Website Modules (Edit Website, Services, Enquiries, Support, Account). (`DONE` - `src/app/dashboard/DashboardShell.js`, `dashboard.module.css`)
+- [x] V2-34: Build Customer Management directory (`/dashboard/customers`) powered by `public.customers` table, customer search & filter, VIP/Repeat badges, visit counts, WhatsApp/Call direct links, and client styling notes modal. (`DONE` - `src/app/dashboard/customers/page.js`)
+- [x] V2-35: Build Salon Operation Management hub (`/dashboard/operations`) with 6 dedicated tabs: Operations Overview & readiness KPIs, Daily Opening & Closing Checklists with persistent browser state, Service Stations & Chair readiness, Operational Task Backlog with priority badges and modal, Salon Policies & Operating Hours, and Inventory & Supplies Roadmap preview. (`DONE` - `src/app/dashboard/operations/page.js`)
+- [x] V2-36: Full visual and responsive verification via browser subagent (desktop 1523px and mobile 390px drawer) and production build validation (`next build` compiled 41 routes cleanly in 9.9s). (`DONE`)
+
 ## Blockers / Decisions Resolved
 
 - Auth/onboarding: Resolved (Supabase Auth, default 'user' role, owner SQL promotion).
@@ -112,4 +173,5 @@
 - Enquiry and support delivery: Resolved (Supabase `enquiries` and `support_requests` tables).
 - Analytics provider/method: Resolved (Privacy-friendly first-party events table).
 - Hosting/domain/budget: Ready for Vercel/Netlify free tier deployment with Supabase.
+- V2 Architecture: Resolved in `PRD-V2.md` (Modular monolith, DB source of truth, no-payment MVP, snapshot immutability, async notification outbox).
 

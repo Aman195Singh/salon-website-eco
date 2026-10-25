@@ -1,0 +1,788 @@
+/* Staff & Shift Management CSS Module — Light Luxury Theme */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0 40px;
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.titleArea h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  font-family: var(--font-heading, serif);
+  color: var(--color-text, #2C2419);
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.titleArea p {
+  color: var(--color-text-secondary, #6B5D4F);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btnAddStaff {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--color-primary, #8B6F4E) 0%, var(--color-primary-dark, #6B5438) 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(139, 111, 78, 0.25);
+}
+
+.btnAddStaff:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(139, 111, 78, 0.35);
+}
+
+/* Tabs */
+.tabsBar {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-border, #E8E0D4);
+  margin-bottom: 28px;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-secondary, #6B5D4F);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  color: var(--color-text, #2C2419);
+}
+
+.tabBtnActive {
+  color: var(--color-primary, #8B6F4E);
+  border-bottom-color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+}
+
+/* Metrics Cards */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.metricCard {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(44, 36, 25, 0.06));
+}
+
+.metricValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  margin-bottom: 2px;
+}
+
+.metricLabel {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+/* Staff Grid */
+.staffGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.staffCard {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(44, 36, 25, 0.06));
+}
+
+.staffCard:hover {
+  border-color: var(--color-primary, #8B6F4E);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(44, 36, 25, 0.08));
+}
+
+.staffHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(139, 111, 78, 0.12);
+  border: 2px solid var(--color-accent, #C9A87C);
+  color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.staffInfo h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  margin: 0 0 4px;
+}
+
+.staffRole {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--color-primary, #8B6F4E);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.staffBio {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.staffContact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--color-text, #2C2419);
+  padding: 12px;
+  background: var(--color-bg-alt, #F5F0E8);
+  border: 1px solid var(--color-border-light, #F0EBE3);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.staffFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border-light, #F0EBE3);
+}
+
+.statusToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.btnActionOutline {
+  background: transparent;
+  border: 1px solid var(--color-primary, #8B6F4E);
+  color: var(--color-primary, #8B6F4E);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnActionOutline:hover {
+  background: rgba(139, 111, 78, 0.1);
+}
+
+/* Shifts Schedule Editor */
+.scheduleContainer {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(44, 36, 25, 0.06));
+}
+
+.staffSelectRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+
+.scheduleTable th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  background: var(--color-bg-alt, #F5F0E8);
+  border-bottom: 1px solid var(--color-border, #E8E0D4);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.scheduleTable td {
+  padding: 14px;
+  border-bottom: 1px solid var(--color-border-light, #F0EBE3);
+  font-size: 0.9rem;
+  color: var(--color-text, #2C2419);
+}
+
+.dayCell {
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  width: 130px;
+}
+
+.timeInput {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.timeInput:focus {
+  border-color: var(--color-primary, #8B6F4E);
+}
+
+/* Modal */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 36, 25, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modalContent {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 14px;
+  padding: 28px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: var(--shadow-xl, 0 16px 48px rgba(44, 36, 25, 0.16));
+  color: var(--color-text, #2C2419);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border-light, #F0EBE3);
+}
+
+.modalHeader h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-family: var(--font-heading, serif);
+  color: var(--color-text, #2C2419);
+  margin: 0;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text, #2C2419);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 8px;
+  color: var(--color-text, #2C2419);
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: var(--color-primary, #8B6F4E);
+  box-shadow: 0 0 0 3px rgba(139, 111, 78, 0.12);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border-light, #F0EBE3);
+}
+
+.btnCancel {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text-secondary, #6B5D4F);
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnCancel:hover {
+  background: var(--color-surface-hover, #FAF7F2);
+  color: var(--color-text, #2C2419);
+}
+
+.btnSubmit {
+  background: linear-gradient(135deg, var(--color-primary, #8B6F4E) 0%, var(--color-primary-dark, #6B5438) 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(139, 111, 78, 0.25);
+}
+
+.btnSubmit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 111, 78, 0.35);
+}
+
+/* Alert Banners */
+.alertSuccess {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.alertError {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #991B1B;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badgeActive {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.badgeProbation {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+.badgeOnLeave {
+  background: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+.badgeResigned {
+  background: #F3F4F6;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+}
+
+.badgeTerminated {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.badgePresent {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.badgeLate {
+  background: #FFF7ED;
+  color: #9A3412;
+  border: 1px solid #FFEDD5;
+}
+
+.badgeHalfDay {
+  background: #F5F3FF;
+  color: #5B21B6;
+  border: 1px solid #DDD6FE;
+}
+
+.badgeAbsent {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.badgePaid {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.badgePending {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+/* Tag Chips */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tagChip {
+  background: rgba(139, 111, 78, 0.1);
+  color: var(--color-primary, #8B6F4E);
+  border: 1px solid rgba(139, 111, 78, 0.25);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Tabular & List Views */
+.tableCard {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(44, 36, 25, 0.06));
+}
+
+.tableToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--color-bg-alt, #F5F0E8);
+  border-bottom: 1px solid var(--color-border, #E8E0D4);
+}
+
+.toolbarControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.datePickerInput {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.datePickerInput:focus {
+  border-color: var(--color-primary, #8B6F4E);
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.dataTable th {
+  padding: 12px 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-secondary, #6B5D4F);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-bg-alt, #F5F0E8);
+  border-bottom: 1px solid var(--color-border, #E8E0D4);
+}
+
+.dataTable td {
+  padding: 14px 18px;
+  font-size: 0.9rem;
+  color: var(--color-text, #2C2419);
+  border-bottom: 1px solid var(--color-border-light, #F0EBE3);
+  vertical-align: middle;
+}
+
+.dataTable tr:hover {
+  background: var(--color-surface-hover, #FAF7F2);
+}
+
+/* Quick Attendance Marker Buttons */
+.quickStatusGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.btnStatusAction {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.btnMarkPresent {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: #A7F3D0;
+}
+
+.btnMarkPresent:hover {
+  background: #D1FAE5;
+}
+
+.btnMarkLate {
+  background: #FFF7ED;
+  color: #9A3412;
+  border-color: #FFEDD5;
+}
+
+.btnMarkLate:hover {
+  background: #FFEDD5;
+}
+
+.btnMarkAbsent {
+  background: #FEF2F2;
+  color: #991B1B;
+  border-color: #FECACA;
+}
+
+.btnMarkAbsent:hover {
+  background: #FEE2E2;
+}
+
+/* Recruitment Pipeline Kanban / Grid */
+.kanbanGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.kanbanColumn {
+  background: var(--color-bg-alt, #F5F0E8);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 380px;
+}
+
+.columnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border, #E8E0D4);
+}
+
+.columnTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  margin: 0;
+}
+
+.candidateCount {
+  background: rgba(139, 111, 78, 0.15);
+  color: var(--color-primary, #8B6F4E);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.candidateCard {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(44, 36, 25, 0.06));
+}
+
+.candidateCard:hover {
+  border-color: var(--color-primary, #8B6F4E);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(44, 36, 25, 0.08));
+}
+
+.candidateName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  margin: 0 0 4px;
+}
+
+.candidateRole {
+  color: var(--color-primary, #8B6F4E);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.candidateDetail {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.candidateActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-light, #F0EBE3);
+}
+
+.btnStageChange {
+  background: var(--color-bg-alt, #F5F0E8);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnStageChange:hover {
+  background: rgba(139, 111, 78, 0.15);
+  border-color: var(--color-primary, #8B6F4E);
+  color: var(--color-primary, #8B6F4E);
+}
+
+/* Exit Action Button */
+.btnExitStaff {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #991B1B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnExitStaff:hover {
+  background: #FEE2E2;
+}
+
+/* 2-Column Form Layout in Modals */
+.formGrid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .formGrid2 {
+    grid-template-columns: 1fr;
+  }
+  .dataTable {
+    display: block;
+    overflow-x: auto;
+  }
+}

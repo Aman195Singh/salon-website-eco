@@ -1,0 +1,587 @@
+/* Luxury Booking Journey Styles — V2 (Light Theme) */
+
+.pageWrapper {
+  min-height: 100vh;
+  padding: 120px 20px 80px;
+  background: radial-gradient(circle at top right, rgba(201, 168, 124, 0.12), transparent 45%),
+              radial-gradient(circle at bottom left, rgba(139, 111, 78, 0.08), transparent 45%),
+              var(--color-bg, #FDFBF8);
+  color: var(--color-text, #2C2419);
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* Header & Breadcrumb */
+.headerSection {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.tagline {
+  display: inline-block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-primary, #8B6F4E);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-family: var(--font-heading, serif);
+  margin-bottom: 12px;
+  color: var(--color-text, #2C2419);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Progress Stepper */
+.stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-tertiary, #9B8E7E);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.stepNumber {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border, #E8E0D4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--color-surface, #FFFFFF);
+  color: var(--color-text-secondary, #6B5D4F);
+}
+
+.stepActive {
+  color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+}
+
+.stepActive .stepNumber {
+  background: var(--color-primary, #8B6F4E);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(139, 111, 78, 0.25);
+}
+
+.stepDone {
+  color: var(--color-text, #2C2419);
+}
+
+.stepDone .stepNumber {
+  background: rgba(139, 111, 78, 0.12);
+  border-color: var(--color-primary, #8B6F4E);
+  color: var(--color-primary, #8B6F4E);
+}
+
+.stepDivider {
+  width: 28px;
+  height: 2px;
+  background: var(--color-border, #E8E0D4);
+}
+
+/* Main Content Layout */
+.contentLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .contentLayout {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Luxury Light Card */
+.card {
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(44, 36, 25, 0.08));
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text, #2C2419);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Category Filters */
+.categoryBar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  scrollbar-width: thin;
+}
+
+.categoryPill {
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: var(--color-bg-alt, #F5F0E8);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text-secondary, #6B5D4F);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.categoryPill:hover {
+  border-color: var(--color-primary, #8B6F4E);
+  color: var(--color-text, #2C2419);
+}
+
+.categoryPillActive {
+  background: var(--color-primary, #8B6F4E);
+  border-color: var(--color-primary, #8B6F4E);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* Services Grid */
+.servicesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.serviceItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border-light, #F0EBE3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.serviceItem:hover {
+  background: var(--color-surface-hover, #FAF7F2);
+  border-color: var(--color-accent, #C9A87C);
+  transform: translateY(-1px);
+}
+
+.serviceItemSelected {
+  background: rgba(201, 168, 124, 0.12);
+  border-color: var(--color-primary, #8B6F4E);
+  box-shadow: 0 2px 8px rgba(139, 111, 78, 0.1);
+}
+
+.serviceMeta h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text, #2C2419);
+  margin-bottom: 4px;
+}
+
+.serviceMeta p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #6B5D4F);
+}
+
+.servicePricing {
+  text-align: right;
+}
+
+.servicePrice {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary, #8B6F4E);
+}
+
+.serviceDuration {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary, #9B8E7E);
+}
+
+/* Specialist Cards */
+.specialistGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.specialistCard {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border-light, #F0EBE3);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.specialistCard:hover {
+  background: var(--color-surface-hover, #FAF7F2);
+  border-color: var(--color-accent, #C9A87C);
+  transform: translateY(-1px);
+}
+
+.specialistCardSelected {
+  background: rgba(201, 168, 124, 0.14);
+  border-color: var(--color-primary, #8B6F4E);
+  box-shadow: 0 2px 8px rgba(139, 111, 78, 0.12);
+}
+
+.specialistAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(139, 111, 78, 0.12);
+  color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  border: 1px solid var(--color-accent, #C9A87C);
+}
+
+.specialistName {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text, #2C2419);
+  margin-bottom: 2px;
+}
+
+.specialistRole {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #6B5D4F);
+}
+
+/* Date Selector Horizontal Scroll */
+.dateScroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  margin-bottom: 24px;
+  scrollbar-width: thin;
+}
+
+.datePill {
+  min-width: 68px;
+  padding: 12px 8px;
+  border-radius: 12px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.datePill:hover {
+  border-color: var(--color-primary, #8B6F4E);
+  background: var(--color-surface-hover, #FAF7F2);
+}
+
+.datePillSelected {
+  background: var(--color-primary, #8B6F4E);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(139, 111, 78, 0.3);
+}
+
+.datePillSelected .dateDay,
+.datePillSelected .dateMonth {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dateDay {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #6B5D4F);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.dateNumber {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.dateMonth {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary, #9B8E7E);
+}
+
+/* Time Slots Grid */
+.slotsSection {
+  margin-top: 16px;
+}
+
+.slotPeriodTitle {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-secondary, #6B5D4F);
+  margin: 16px 0 10px;
+  font-weight: 700;
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.slotBtn {
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.slotBtn:hover {
+  border-color: var(--color-primary, #8B6F4E);
+  background: var(--color-surface-hover, #FAF7F2);
+}
+
+.slotBtnSelected {
+  background: var(--color-primary, #8B6F4E);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #8B6F4E);
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(139, 111, 78, 0.25);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--color-text-secondary, #6B5D4F);
+  font-size: 0.95rem;
+}
+
+/* Booking Details Form */
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-text, #2C2419);
+}
+
+.formInput, .formTextarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  border-radius: 8px;
+  color: var(--color-text, #2C2419);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.formInput:focus, .formTextarea:focus {
+  border-color: var(--color-primary, #8B6F4E);
+  box-shadow: 0 0 0 3px rgba(139, 111, 78, 0.12);
+}
+
+.formInput::placeholder, .formTextarea::placeholder {
+  color: var(--color-text-tertiary, #9B8E7E);
+}
+
+/* Sidebar / Order Summary */
+.summarySidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-light, #F0EBE3);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary, #6B5D4F);
+}
+
+.summaryRow span:last-child {
+  color: var(--color-text, #2C2419);
+  font-weight: 600;
+}
+
+.summaryRowTotal {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary, #8B6F4E);
+}
+
+.policyNotice {
+  background: var(--color-bg-alt, #F5F0E8);
+  border: 1px dashed var(--color-border, #E8E0D4);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #6B5D4F);
+  margin: 16px 0;
+  line-height: 1.5;
+}
+
+.confirmBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primary, #8B6F4E) 0%, var(--color-primary-dark, #6B5438) 100%);
+  color: #FFFFFF;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(139, 111, 78, 0.3);
+}
+
+.confirmBtn:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139, 111, 78, 0.4);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary, #6B5D4F);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.backBtn:hover {
+  color: var(--color-primary, #8B6F4E);
+}
+
+/* Success Celebration View */
+.successCard {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(46, 125, 50, 0.12);
+  color: #2E7D32;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  border: 2px solid #2E7D32;
+  box-shadow: 0 0 24px rgba(46, 125, 50, 0.2);
+}
+
+.refBadge {
+  display: inline-block;
+  background: rgba(139, 111, 78, 0.1);
+  border: 1px solid var(--color-primary, #8B6F4E);
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary, #8B6F4E);
+  letter-spacing: 1px;
+  margin: 12px 0 24px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.actionBtnSecondary {
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E8E0D4);
+  color: var(--color-text, #2C2419);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.actionBtnSecondary:hover {
+  background: var(--color-surface-hover, #FAF7F2);
+  border-color: var(--color-primary, #8B6F4E);
+}

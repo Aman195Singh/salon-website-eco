@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   HiOutlineMenu,
   HiOutlineX,
+  HiOutlineCalendar,
   HiOutlinePhone,
   HiOutlineUser,
   HiOutlineChevronDown,
@@ -142,29 +143,30 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-
-          {/* ADMIN PANEL PROMINENT TAB (VISIBLE ONLY TO SALON OWNER / ADMIN) */}
-          {isOwner && (
-            <Link
-              href="/dashboard"
-              className={styles.adminNavLink}
-              title="Open Salon Owner Admin Panel"
-            >
-              <HiOutlineAdjustments size={15} />
-              <span>Admin Panel</span>
-            </Link>
-          )}
         </nav>
 
         {/* CTA + User Profile + Mobile toggle */}
         <div className={styles.actions}>
+          {/* Prominent Primary Booking CTA */}
           <Link
-            href="/contact"
+            href="/book"
             className={`btn btn-primary btn-sm ${styles.ctaBtn}`}
           >
-            <HiOutlinePhone size={16} />
-            <span>Book Now</span>
+            <HiOutlineCalendar size={16} />
+            <span>Book Appointment</span>
           </Link>
+
+          {/* Owner Quick Dashboard Access */}
+          {isOwner && (
+            <Link
+              href="/dashboard"
+              className={styles.adminActionBtn}
+              title="Open Salon Owner Admin Panel"
+            >
+              <HiOutlineAdjustments size={15} />
+              <span>Admin</span>
+            </Link>
+          )}
 
           {/* User Account / Profile Section */}
           {user ? (
@@ -336,13 +338,13 @@ export default function Header() {
 
         <div className={styles.mobileCta}>
           <Link
-            href="/contact"
+            href="/book"
             className="btn btn-primary btn-lg"
             style={{ width: "100%" }}
             onClick={() => setMenuOpen(false)}
           >
-            <HiOutlinePhone size={18} />
-            Book Now
+            <HiOutlineCalendar size={18} />
+            Book Appointment
           </Link>
         </div>
       </nav>
