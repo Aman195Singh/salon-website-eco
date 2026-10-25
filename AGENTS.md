@@ -143,6 +143,57 @@ Report:
 - **Strict State Transitions:** Operational status updates must follow the approved state machine (`confirmed -> arrived -> in_service -> completed`, `cancelled`, `no_show`). Reschedules must be atomic.
 - **Preserve Verified Features:** Do not break existing public pages, CMS live preview, enquiries inbox, or RLS security policies.
 
+## 16. Feature Quality Protocol (Applies to EVERY Feature, Fix, or Change)
+
+A feature is NOT done because it compiles or "looks right". It is done only when it is verified to work, including its failure paths.
+
+### Step 1 — Understand Before Coding
+- Restate the feature in 3–5 lines: who uses it, what they do, what must happen.
+- Inspect the existing code and database first. Reuse existing patterns, components, helpers, and RLS style. Never assume something exists or works; verify by reading the code.
+- List assumptions. Ask only about real blockers (cost, security, data loss, unclear business rules). Otherwise use the safest assumption and state it.
+
+### Step 2 — Write the Spec First
+- Acceptance criteria as an observable, testable checklist.
+- Data flow: UI -> server -> database -> response, detailing validation and permission points.
+- Every screen state: loading, empty, success, error, no-permission, slow or offline network.
+
+### Step 3 — Edge-Case Matrix BEFORE Writing Code
+Produce table: `Scenario | What can go wrong | Expected behavior | How handled | How tested` covering:
+1. **Input:** empty, too long, wrong type, special characters/emoji, extra spaces, duplicates, script/SQL injection.
+2. **Auth & Permissions:** not logged in, wrong role, reading another user's data, expired session.
+3. **Concurrency:** double click, two users at once, race conditions, duplicate or retried requests, stale data.
+4. **Failure:** network error, server error, database error, third-party failure, timeout, partial failure, refresh mid-action.
+5. **Time:** timezone (IST), past and future dates, midnight, month and year boundary, leap day.
+6. **Data:** null/missing values, old records without new field, large lists, deleted/inactive records, post-migration data.
+7. **State:** invalid status transitions, repeated actions, cancel/undo, back button.
+8. **UI:** mobile and desktop, keyboard navigation, focus, labels, long text overflow, slow loading.
+9. **Security & Privacy:** zero secrets in client code, server-side validation, rate limits on public endpoints, no PII in logs/analytics.
+10. **Compatibility:** existing pages, routes, and data keep working (additive changes only).
+
+### Step 4 — Plan and Approval Gate
+- Provide a concise step-by-step plan.
+- **STOP and ask for approval** before: schema changes, new dependencies, paid services, auth/RLS modifications, or anything that deletes or rewrites existing data.
+
+### Step 5 — Implement Defensively
+- Smallest coherent change. Never rewrite working code.
+- Validate on the server; enforce DB rules (constraints, RLS).
+- No silent failures. Catch every error, log safely, show clear user messages without stack traces/secrets.
+- No hard-coded business values, fake data, or leftover placeholders.
+- Build loading, empty, and error states in UI.
+
+### Step 6 — Verify With Evidence
+- Run every check that exists (lint, build, tests) and report actual outputs.
+- Test both happy path and failure cases for each matrix row.
+- Automated tests for rule-heavy logic (slots, money, dates, permissions).
+- Break the feature intentionally: invalid input, wrong user, double submit, refresh mid-action.
+- Provide a numbered manual test script.
+
+### Step 7 — Report & Stop Rules
+- Summarize: files changed; edge cases handled/deferred/N/A; checks run and results; un-tested areas; known limitations; manual test script.
+- Update `TASKS.md` and `CURRENT_STATE.md` only after actual verification.
+- Stop and report if requirements conflict, security/data is uncertain, or checks fail.
+
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
