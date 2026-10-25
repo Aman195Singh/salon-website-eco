@@ -4,10 +4,10 @@ A modern, high-conversion luxury salon website and single-salon owner management
 
 ---
 
-## 🎯 Current Target: V2 — Appointment Booking Management (V1.5 Released)
+## 🎯 Current Target: V2 — Appointment Booking Management (Phase 1 Complete)
 
-- **V1.5 Quality Release:** Fully verified and released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. See `docs/archive/V1.5_RELEASE_REPORT.md` and `docs/archive/V1.5_PROGRESS.md`.
-- **V2 Milestone (Active):** Phase 1 — Appointment Booking Management MVP (`PRD-V2.md`). In-person appointments, staff scheduling, availability engine, double-booking prevention, mobile booking journey (`/book`), and owner calendar.
+- **V2 Phase 1 Release (Ready for Merge):** In-person appointment booking wizard (`/book`), customer self-service portal (`/book/manage`), registered customer appointments (`/account`), specialist chair-side portal (`/staff/appointments`), owner calendar (`/dashboard/appointments`), workforce HR & payroll suite (`/dashboard/staff`), customer directory (`/dashboard/customers`), operation management hub (`/dashboard/operations`), and async notification outbox. See formal [V2 Phase 1 Release Report](file:///c:/Users/Aman%20Singh/OneDrive/Desktop/salon-website-eco/docs/V2_PHASE1_RELEASE_REPORT.md).
+- **V1.5 Quality Baseline:** Released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. Preserved in `docs/archive/V1.5_RELEASE_REPORT.md`.
 
 ---
 
