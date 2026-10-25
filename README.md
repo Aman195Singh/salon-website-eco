@@ -1,12 +1,13 @@
-# 🌟 Luxury Salon Website & Management Web App (V1.5)
+# 🌟 Luxury Salon Website & Management Web App
 
 A modern, high-conversion luxury salon website and single-salon owner management system built with **Next.js (App Router)** and **Supabase**.
 
 ---
 
-## 🎯 Current Release: V1.5 (Released)
+## 🎯 Current Target: V2 — Appointment Booking Management (V1.5 Released)
 
-This project has completed both the Pre-V1.5 Stabilization phase (`PRE_V1.5_FIXES.md`) and the full **V1.5 Quality Enhancement Release** (`PRD-V1.5.md`). All features across responsiveness, enquiry management, email composer, CMS usability, security, SEO, accessibility, legal pages, and analytics readability are implemented, verified, and released. See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md` for full verification details.
+- **V1.5 Quality Release:** Fully verified and released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md`.
+- **V2 Milestone (Active):** Phase 1 — Appointment Booking Management MVP (`PRD-V2.md`). In-person appointments, staff scheduling, availability engine, double-booking prevention, mobile booking journey (`/book`), and owner calendar.
 
 ---
 

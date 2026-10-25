@@ -1,22 +1,20 @@
 # Version Roadmap
 
-**Current development target:** V1.5  
+**Current development target:** V2 — Phase 1: Appointment Booking Management MVP  
 **Product:** Single-salon website and owner management application  
-**Rule:** Only the active release PRD authorizes implementation.
+**Rule:** Only the active release PRD (`PRD-V2.md`) authorizes implementation.
 
 ## V1 — Existing Baseline
 
 **Purpose:** Public salon website and basic owner management.
+**Status:** Released (baseline preserved in `PRD-V1.md`).
 
 Original requirements are preserved in `PRD-V1.md`.
 
-Reported functionality includes public pages, owner dashboard/CMS, enquiries, basic analytics, FAQ chatbot, developer support, and extra account functionality. See `CURRENT_STATE.md`; reported does not mean verified.
-
-**Status:** Built according to the owner; source-code and runtime verification is pending in this documentation package.
-
 ## V1.5 — Quality, Usability and Reliability
 
-**Purpose:** Improve the existing V1 without replacing it or expanding into a business operations platform.
+**Purpose:** Quality, accessibility, responsiveness, email composer, CMS safety, and security hardening.
+**Status:** Released on 2026-10-24 (Tagged `v1.5`). See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md`.
 
 ### In scope
 - Preserve and regression-test existing V1 features.
@@ -46,26 +44,21 @@ Reported functionality includes public pages, owner dashboard/CMS, enquiries, ba
 
 ## V2 — Business Operations and Automation
 
-**Status:** Planned only. Do not implement as part of V1.5.
+**Status:** Active Development — Phase 1: Appointment Booking Management MVP  
+**Authorizing PRD:** `PRD-V2.md`
 
-The owner's high-level V2 direction:
-- Booking Management System.
-- Customer Management System.
-- Booking reminder system.
-- Marketing system.
-- Service review and feedback system.
-- Edge-case handling across these workflows.
-- Analytics visualizations for these systems, added to the admin analytics area.
-
-Detailed V2 workflows, data model, permissions, integrations, edge cases, and acceptance criteria will be designed in `PRD-V2.md` when V2 planning begins.
+### V2 Phased Implementation:
+- **Phase 1 (Active Target):** Appointment Booking Management MVP (In-person appointments, staff scheduling, working hours, breaks, time off, availability calculation, double-booking prevention, mobile booking UI `/book`, owner calendar `/dashboard/appointments`, async notifications).
+- **Phase 2 (Future):** Online payments, deposits, and refunds (Razorpay / UPI integration).
+- **Phase 3 (Future):** WhatsApp notification automation & AI receptionist.
+- **Phase 4 (Future):** Customer CRM, loyalty, visit history, and client segmentation.
+- **Phase 5 (Future):** Marketing campaigns, automated review collection, and service profitability analytics.
 
 ## Release Rules
 
-1. `PRD-V1.md` remains the historical record of original V1 requirements; do not rewrite it to describe V1.5.
-2. `PRD-V1.5.md` is the only requirements document authorizing V1.5 changes.
-3. V2 items are not implementation instructions for V1.5.
-4. Preserve existing data, routes, user permissions, and working behaviour unless an approved change explicitly requires otherwise.
-5. Do not claim a feature is implemented or verified without inspecting and testing it.
-6. Prefer additive, backward-compatible changes and the smallest safe implementation.
-7. Update `CURRENT_STATE.md` after verified changes; update `TASKS.md` as task status changes.
-8. Create `PRD-V2.md` only when V2 planning is authorized.
+1. `PRD-V1.md` and `PRD-V1.5.md` remain the historical records of earlier releases; do not rewrite them.
+2. `PRD-V2.md` is the only requirements document authorizing V2 changes.
+3. Preserve existing V1/V1.5 data, routes, CMS capabilities, user permissions, and working behaviour.
+4. Do not claim a feature is implemented or verified without inspecting and testing it.
+5. Prefer additive, backward-compatible schema changes and the smallest safe implementation.
+6. Update `CURRENT_STATE.md` after verified changes; update `TASKS.md` as task status changes.

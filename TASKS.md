@@ -1,6 +1,6 @@
 # Salon Website — Task Tracker
 
-**Current release:** V1.5 (Released) — Backward-compatible Quality Enhancement Release  
+**Current release:** V2 — Phase 1: Appointment Booking Management MVP (V1.5 Released)  
 **Rule:** Mark a task `DONE` only after the result has been verified. `IMPLEMENTED` means code exists but verification is incomplete.
 
 ## Status Legend
@@ -104,6 +104,46 @@
 - [x] V15-13: Analytics readability, descriptive metric subtitles, timeframe label, and empty states. (`DONE`)
 - [x] V15-14: Full regression, RLS test script verification, and release documentation. (`DONE`)
 
+## Phase 8 — V2 Appointment Booking Management MVP (Active)
+
+Authorizing PRD: `PRD-V2.md`
+
+### 8.0 Documentation & Safety Architecture
+- [x] V2-00: Audit repository and organize V2 booking blueprint. (`DONE`)
+- [x] V2-01: Establish `PRD-V2.md` as single source of truth for V2 booking requirements. (`DONE`)
+- [x] V2-02: Update `AGENTS.md`, `VERSION_ROADMAP.md`, `CURRENT_STATE.md`, and `DESIGN.md`. (`DONE`)
+
+### 8.1 Database Schema & Migration Foundation
+- [ ] V2-03: Create migration for `staff`, `staff_services`, `staff_working_hours`, `staff_breaks`, and `staff_time_off`. (`TODO`)
+- [ ] V2-04: Create migration for `customers`, `appointments`, `appointment_services` (snapshots), `appointment_events`, and `notification_jobs`. (`TODO`)
+- [ ] V2-05: Add foreign keys, check constraints, indexes, and PostgreSQL exclusion / row locking conflict rules. (`TODO`)
+- [ ] V2-06: Implement and test Row Level Security (RLS) policies for all new booking tables. (`TODO`)
+
+### 8.2 Availability Calculation Engine
+- [ ] V2-07: Implement pure slot calculation module (`src/lib/booking/availability.js`) supporting durations, buffers, working hours, breaks, time off, and notice window. (`TODO`)
+- [ ] V2-08: Add unit and boundary tests for slot calculation. (`TODO`)
+- [ ] V2-09: Build availability server API endpoint (`GET /api/booking/availability`). (`TODO`)
+
+### 8.3 Booking Write Path & Concurrency Protection
+- [ ] V2-10: Implement server booking creation transaction with canonical price/duration lookup and snapshot persistence. (`TODO`)
+- [ ] V2-11: Add idempotency handling and secure random public booking reference generation. (`TODO`)
+- [ ] V2-12: Write automated concurrency test (`scripts/test-booking-concurrency.mjs`) verifying exactly 1 of 20+ parallel requests succeeds. (`TODO`)
+
+### 8.4 Customer Booking Journey
+- [ ] V2-13: Build mobile-first customer booking page (`/book`) with service, staff, date, and slot selection. (`TODO`)
+- [ ] V2-14: Implement customer review, details form, loading, empty, slot-taken, and success states. (`TODO`)
+- [ ] V2-15: Implement customer self-service cancellation and reschedule flows (cutoff enforced). (`TODO`)
+
+### 8.5 Owner & Staff Appointment Operations
+- [ ] V2-16: Build owner calendar and appointment list view (`/dashboard/appointments`) with status/date/staff filters. (`TODO`)
+- [ ] V2-17: Implement operational status transitions (`arrived`, `in_service`, `completed`, `cancelled`, `no_show`) and manual booking form. (`TODO`)
+- [ ] V2-18: Build staff management and schedule/leave editor (`/dashboard/staff`). (`TODO`)
+
+### 8.6 Notifications, Hardening & Final Verification
+- [ ] V2-19: Implement transactional outbox processor for asynchronous booking confirmations and reminders. (`TODO`)
+- [ ] V2-20: Add rate limiting, abuse protection, and error correlation IDs. (`TODO`)
+- [ ] V2-21: Full regression testing: V1.5 public pages, CMS editor, enquiries, customer account, build, and lint. (`TODO`)
+
 ## Blockers / Decisions Resolved
 
 - Auth/onboarding: Resolved (Supabase Auth, default 'user' role, owner SQL promotion).
@@ -112,4 +152,5 @@
 - Enquiry and support delivery: Resolved (Supabase `enquiries` and `support_requests` tables).
 - Analytics provider/method: Resolved (Privacy-friendly first-party events table).
 - Hosting/domain/budget: Ready for Vercel/Netlify free tier deployment with Supabase.
+- V2 Architecture: Resolved in `PRD-V2.md` (Modular monolith, DB source of truth, no-payment MVP, snapshot immutability, async notification outbox).
 

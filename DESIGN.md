@@ -122,12 +122,23 @@ Use subtle, purposeful transitions only. Respect `prefers-reduced-motion`. Do no
 5. Design the dashboard shell and one page-editing flow before implementing every CMS section.
 6. Update this document only when an intentional design decision changes.
 
+## 11. V2 Appointment Booking UX & Design Rules
 
-## 9. Release Compatibility and V1.5 Polish
-
-- Keep the existing approved visual identity and component behaviour unless a specific V1.5 task requires a change.
-- Prefer small, consistent improvements over a full redesign.
-- New controls must reuse existing spacing, typography, colour, focus, button, and form conventions.
-- New and existing forms/data-driven screens should clearly communicate loading, success, empty, and error states.
-- Preserve accessible keyboard and mobile behaviour when improving components.
-- V2 business workflows are not part of the V1.5 design scope.
+- **Mobile-First Experience:** The customer booking flow (`/book`) must be easily usable one-handed on small screens (320px–375px) without horizontal scrolling or tiny hit targets.
+- **Clear Stepped Flow:** Guide the customer smoothly: Service → Staff ("Any" or specific) → Date → Slot → Contact Details → Review → Confirmation.
+- **Transparent Summary:** Always display duration, total price, and cancellation cutoff before final submission. Never surprise the client.
+- **Non-Color Dependent States:** Do not use color alone to communicate slot availability or status. Use text labels, disabled attributes, and aria tags.
+- **First-Class UI States:**
+  - *Loading:* Skeleton loaders for date/time slots.
+  - *Empty:* Encouraging empty states when no slots are open on a selected date.
+  - *Slot Taken Conflict (`SLOT_UNAVAILABLE`):* Clear alert explaining another client just booked that slot, with immediate 1-click slot refresh.
+  - *Network Retry:* Preserves user inputs and idempotency key on failure.
+- **Dashboard Calendar UX (`/dashboard/appointments`):**
+  - Clean day and week views with status badges (`confirmed`, `arrived`, `in_service`, `completed`, `cancelled`, `no_show`).
+  - Search by client name, phone, or booking reference.
+  - Reschedule modal displaying old vs new slot with atomic confirmation.
+- **Accessibility & Focus:**
+  - Fully navigable via keyboard (Tab and Arrow keys for date/time chips).
+  - Screen reader announcements for slot selection and errors (`role="alert"`).
+  - High-contrast focus rings matching existing design tokens.
+  - List alternative alongside visual calendar grids.

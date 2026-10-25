@@ -1,10 +1,11 @@
-# Current System State & Audit — V1.5 Baseline
+# Current System State & Audit — V2 Baseline
 
-**Date of Audit:** 2026-10-24  
-**Git Branch:** `feature/v1.5`  
+**Date of Audit:** 2026-10-25  
+**Current Target:** V2 — Phase 1: Appointment Booking Management MVP (`PRD-V2.md`)  
+**Git Baseline:** `main` (V1.5 Released, commit `86ac5dd`, Tag `v1.5`)  
 **Baseline Verification:**
-- `npm run lint`: Known baseline issues present (`✖ 17 problems (12 errors, 5 warnings)`, Exit code 1). Main had 10 errors / 4 warnings; fix branch added 3 issues in `account/page.js` and `contact/page.js`. **Rule: No new lint errors or warnings may be added during V1.5.**
-- `npm run build`: Production build passes cleanly with `/`, `/about`, `/services` dynamic (`ƒ`) and all 17 routes building successfully.
+- `npm run lint`: Baseline recorded (`✖ 17 problems (12 errors, 5 warnings)`, Exit code 1). Rule: Zero new lint errors or warnings permitted.
+- `npm run build`: Production build passes cleanly with all 21 static/dynamic routes compiled in 8.7s (Exit code 0).
 - Security tests: `scripts/test-non-owner-access.mjs` passes (RLS blocks non-owners from all owner resources).
 - Live Database: `sql/fix-01`, `sql/fix-03` (user_id policy), and `sql/fix-04` confirmed active by owner.
 
@@ -46,7 +47,24 @@ Status legend:
 
 ---
 
-## 2. Security & RLS Matrix
+## 2. V2 Appointment Booking Status (Active Target)
+
+All V2 Booking features are governed by `PRD-V2.md`. Implementation has not yet commenced.
+
+| Area / Feature | Component / Table | Status | Detailed Notes |
+|---|---|---|---|
+| **Staff & Scheduling Schema** | `staff`, `staff_services`, `staff_working_hours`, `staff_breaks`, `staff_time_off` | `NOT IMPLEMENTED` | Design documented in `PRD-V2.md` §5. Awaiting Phase 8.1 database migration. |
+| **Booking & Snapshot Schema** | `customers`, `appointments`, `appointment_services`, `appointment_events`, `notification_jobs` | `NOT IMPLEMENTED` | Schema, foreign keys, snapshots, and RLS documented in `PRD-V2.md` §5. |
+| **Availability Engine** | `src/lib/booking/availability.js` | `NOT IMPLEMENTED` | Pure slot calculation, buffer, working hours, breaks, notice window (PRD-V2 §7). |
+| **Double-Booking Prevention** | PostgreSQL constraint / serializable lock | `NOT IMPLEMENTED` | No-overlap rule on `[starts_at, ends_at)` (PRD-V2 §8). |
+| **Customer Booking Journey** | `/book` (`src/app/book/page.js`) | `NOT IMPLEMENTED` | Mobile-first 8-step flow, 12 UI states, loading/empty/slot-taken/retry (PRD-V2 §3). |
+| **Owner Booking Management** | `/dashboard/appointments` | `NOT IMPLEMENTED` | Calendar view, filterable list, status transitions, manual booking (PRD-V2 §2.4). |
+| **Staff Schedule & Panel** | `/dashboard/staff`, `/staff/appointments` | `NOT IMPLEMENTED` | Staff schedule editor, daily client view (PRD-V2 §2.3). |
+| **Async Notification Outbox** | Background worker / outbox processor | `NOT IMPLEMENTED` | Transactional outbox decoupling booking from SMS/email (PRD-V2 §10). |
+
+---
+
+## 3. Security & RLS Matrix
 
 | Security Domain | Mechanism | Status | Evidence / Notes |
 |---|---|---|---|
@@ -58,7 +76,7 @@ Status legend:
 
 ---
 
-## 3. Manual Regression Test Checklist
+## 4. Manual Regression Test Checklist
 
 1. [ ] **Public Navigation & Pages:**
    - Home (`/`), About (`/about`), Services (`/services`), Gallery (`/gallery`), Contact (`/contact`) render cleanly on mobile (320px) and desktop (1440px).

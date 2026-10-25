@@ -11,7 +11,7 @@ Before changing code, read in this order:
 2. `PRODUCT_VISION.md` — long-term direction.
 3. `VERSION_ROADMAP.md` — release boundaries.
 4. `CURRENT_STATE.md` — known state and verification gaps.
-5. The active release PRD: `PRD-V1.5.md` for V1.5 work.
+5. The active release PRD: `PRD-V2.md` for V2 Appointment Booking work (`PRD-V1.5.md` for historical baseline).
 6. `DESIGN.md` — shared design rules.
 7. Relevant items in `TASKS.md`.
 
@@ -19,30 +19,30 @@ Inspect actual code before assuming that documented functionality exists or work
 
 ## 3. Current Release and Version Boundaries
 
-- **Active target:** V1.5 — backward-compatible improvement release.
-- `PRD-V1.md` is the historical record of original V1 requirements. Do not rewrite it to describe V1.5.
-- `PRD-V1.5.md` is the requirements source for V1.5 implementation.
-- `VERSION_ROADMAP.md` describes what belongs to V1, V1.5, and V2.
-- V2 is planned only. Do not implement V2 systems during V1.5.
+- **Active target:** V2 — Phase 1: Appointment Booking Management MVP.
+- `PRD-V1.md` and `PRD-V1.5.md` are the historical records of earlier releases. Do not rewrite them.
+- `PRD-V2.md` is the authoritative requirements source for V2 implementation.
+- `VERSION_ROADMAP.md` describes release phases across V1, V1.5, V2, and future releases.
 - `CURRENT_STATE.md` must distinguish verified features from reported or unverified features.
 - `TASKS.md` tracks current implementation and verification tasks.
 
-V1.5 is not a rebuild. Preserve existing working behaviour and data.
+V2 builds upon the verified V1.5 baseline. Preserve all existing working behaviour, CMS capabilities, and data.
 
-## 4. Mandatory V1.5 Compatibility Rules
+## 4. Mandatory Compatibility Rules
 
-- Do not remove, rename, or silently alter existing pages, routes, dashboard sections, account flows, APIs, or user-visible behaviour.
+- Do not remove, rename, or silently alter existing pages, routes, dashboard sections, account flows, APIs, or user-visible behaviour from V1.5.
 - Do not delete or overwrite existing data.
-- Prefer additive changes and the smallest coherent implementation.
+- Prefer additive schema changes and the smallest coherent implementation.
 - Do not change the framework, authentication, database, storage, analytics, or deployment provider without approval.
 - Do not add a paid service, API account, or dependency with material cost/security impact without explaining the trade-offs and receiving approval.
 - If a schema change is necessary, explain why first and provide a migration, backup, and recovery plan.
 - Run relevant regression tests after changes.
 - Stop and report if requirements conflict with existing behaviour or architecture instead of silently choosing.
 
-## 5. V2 Features — Do Not Implement in V1.5
+## 5. V2 Boundaries — Booking MVP First
 
-These are future scope: booking management, availability/calendar, customer CRM/lifecycle, automated reminders, WhatsApp automation/AI receptionist, marketing automation, automated review/feedback collection, advanced business analytics, multi-salon tenancy, and SaaS billing. See `VERSION_ROADMAP.md`.
+- **In Scope for V2 Phase 1:** In-person appointment booking, staff scheduling, working hours, breaks, time off, availability calculation, double-booking prevention, customer booking UI, owner appointment calendar, and async notifications.
+- **Future Scope (Do Not Implement in Phase 1):** Online payment gateway/refunds, two-way Google Calendar sync, automated waitlists, recurring appointments, WhatsApp receptionist automation, multi-salon tenancy, and SaaS subscription billing. See `VERSION_ROADMAP.md` and `PRD-V2.md`.
 
 ## 6. Working Method
 
@@ -132,3 +132,13 @@ Report:
 - Manual browser verification steps
 - Remaining issues/decisions
 - `TASKS.md` status changes, if any
+
+## 15. V2 Booking Implementation Guardrails
+
+- **Database is Source of Truth:** Slot availability display in the browser is strictly advisory. The database transaction and conflict check (`[starts_at, ends_at)`) decide authoritative booking creation.
+- **Double-Booking Prevention:** Never rely on application-level checks alone. Enforce no-overlap via PostgreSQL exclusion constraints (`EXCLUDE USING gist`) or serializable row-level locking.
+- **Snapshot Persistence:** Always snapshot `service_name_snapshot`, `duration_minutes_snapshot`, and `price_paise_snapshot` on `appointment_services` at booking creation time so future catalogue edits never mutate historical records.
+- **Zero Client-Side Trust:** Never trust client-supplied prices, durations, staff eligibility, or status transitions. All parameters must be validated server-side.
+- **Asynchronous Notifications:** Decouple messaging from booking creation using the `notification_jobs` transactional outbox. A third-party SMS/email gateway failure must never roll back a valid appointment.
+- **Strict State Transitions:** Operational status updates must follow the approved state machine (`confirmed -> arrived -> in_service -> completed`, `cancelled`, `no_show`). Reschedules must be atomic.
+- **Preserve Verified Features:** Do not break existing public pages, CMS live preview, enquiries inbox, or RLS security policies.
