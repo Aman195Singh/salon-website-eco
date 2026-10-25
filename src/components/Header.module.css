@@ -84,26 +84,27 @@
   border-radius: var(--radius-full);
 }
 
-/* Admin Panel Special Nav Tab */
-.adminNavLink {
+/* Owner Admin Quick Access Button */
+.adminActionBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 5px;
+  padding: 6px 12px;
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #92400e;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--color-primary-dark);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-fast);
 }
 
-.adminNavLink:hover {
-  background: rgba(245, 158, 11, 0.25);
+.adminActionBtn:hover {
+  background: rgba(var(--color-primary-rgb), 0.18);
+  border-color: var(--color-primary);
   transform: translateY(-1px);
 }
 
@@ -116,7 +117,18 @@
 }
 
 .ctaBtn {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(139, 111, 78, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.ctaBtn:hover {
+  box-shadow: 0 4px 14px rgba(139, 111, 78, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Sign In Button for Guests */
@@ -127,7 +139,7 @@
   padding: 8px 14px;
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -136,7 +148,7 @@
 }
 
 .signInBtn:hover {
-  background: var(--color-background-alt);
+  background: var(--color-bg-alt);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
@@ -180,7 +192,7 @@
 .avatarNameShort {
   font-size: var(--text-xs);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   max-width: 90px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -231,7 +243,7 @@
 .dropdownUserName {
   font-size: var(--text-sm);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   margin-bottom: 2px;
 }
 
@@ -277,7 +289,7 @@
   padding: 8px 10px;
   font-size: var(--text-xs);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   text-decoration: none;
   border-radius: var(--radius-md);
   border: none;
@@ -289,7 +301,7 @@
 }
 
 .dropdownItem:hover {
-  background: var(--color-background-alt);
+  background: var(--color-bg-alt);
   color: var(--color-primary);
 }
 
@@ -322,7 +334,7 @@
   transition: background var(--transition-fast);
 }
 .menuToggle:hover {
-  background: var(--color-background-alt);
+  background: var(--color-bg-alt);
 }
 
 /* Mobile Navigation */

@@ -49,18 +49,28 @@ Status legend:
 
 ## 2. V2 Appointment Booking Status (Active Target)
 
-All V2 Booking features are governed by `PRD-V2.md`. Implementation has not yet commenced.
+All V2 Booking features are governed by `PRD-V2.md`. Customer booking journey and availability calculation are implemented and verified.
 
 | Area / Feature | Component / Table | Status | Detailed Notes |
 |---|---|---|---|
-| **Staff & Scheduling Schema** | `staff`, `staff_services`, `staff_working_hours`, `staff_breaks`, `staff_time_off` | `NOT IMPLEMENTED` | Design documented in `PRD-V2.md` §5. Awaiting Phase 8.1 database migration. |
-| **Booking & Snapshot Schema** | `customers`, `appointments`, `appointment_services`, `appointment_events`, `notification_jobs` | `NOT IMPLEMENTED` | Schema, foreign keys, snapshots, and RLS documented in `PRD-V2.md` §5. |
-| **Availability Engine** | `src/lib/booking/availability.js` | `NOT IMPLEMENTED` | Pure slot calculation, buffer, working hours, breaks, notice window (PRD-V2 §7). |
-| **Double-Booking Prevention** | PostgreSQL constraint / serializable lock | `NOT IMPLEMENTED` | No-overlap rule on `[starts_at, ends_at)` (PRD-V2 §8). |
-| **Customer Booking Journey** | `/book` (`src/app/book/page.js`) | `NOT IMPLEMENTED` | Mobile-first 8-step flow, 12 UI states, loading/empty/slot-taken/retry (PRD-V2 §3). |
-| **Owner Booking Management** | `/dashboard/appointments` | `NOT IMPLEMENTED` | Calendar view, filterable list, status transitions, manual booking (PRD-V2 §2.4). |
-| **Staff Schedule & Panel** | `/dashboard/staff`, `/staff/appointments` | `NOT IMPLEMENTED` | Staff schedule editor, daily client view (PRD-V2 §2.3). |
-| **Async Notification Outbox** | Background worker / outbox processor | `NOT IMPLEMENTED` | Transactional outbox decoupling booking from SMS/email (PRD-V2 §10). |
+| **Staff & Scheduling Schema** | `staff`, `staff_services`, `staff_working_hours`, `staff_breaks`, `staff_time_off` | `VERIFIED` | Executed live in Supabase SQL Editor. Verified via `scripts/verify-all-tables.mjs`. |
+| **Booking & Snapshot Schema** | `customers`, `appointments`, `appointment_services`, `appointment_events`, `notification_jobs` | `VERIFIED` | Executed live in Supabase SQL Editor. RLS policies active and verified via `scripts/test-booking-rls.mjs`. |
+| **Availability Engine** | `src/lib/booking/availability.js` | `VERIFIED` | Pure slot calculation in IST, 2h notice, breaks exclusion, 10m buffer. Verified with `scripts/test-availability.mjs`. |
+| **Double-Booking Prevention** | PostgreSQL constraint `no_staff_double_booking` & API slot lock | `VERIFIED` | `EXCLUDE USING gist` + atomic slot lock. Tested via `scripts/test-booking-concurrency.mjs`: 20 parallel requests yielded exactly 1 success (200), 19 conflict rejections (409), 0 crashes, and idempotent replay. |
+| **Customer Booking Journey** | `/book` (`src/app/book/page.js`) | `VERIFIED` | 4-step wizard, interactive 30-day date picker, time slot grid, details form, confirmation reference card. Verified via automated browser subagent. |
+| **Customer Self-Service Portal** | `/book/manage` (`src/app/book/manage/page.js`, `/api/booking/manage`) | `VERIFIED` | Secure reference + phone lookup, 4-hour cancellation policy lockout with WhatsApp emergency CTA, atomic reschedule slot picker (with max 2 changes abuse protection), cancellation with audit trail in `appointment_events`. Verified with `scripts/test-manage-booking.mjs` (6/6 tests passed). |
+| **Customer Account Portal** | `/account` (`src/app/account/page.js`) | `VERIFIED` | "My Appointments" tab added for registered customers to view active/past bookings, schedule details in IST, status badge, and direct link to self-service manage portal (PRD-V2 §2.2). |
+| **Staff Chair-Side Portal** | `/staff/appointments` (`src/app/staff/appointments/page.js`) | `VERIFIED` | Mobile-first stylist schedule view with date and specialist selector, client details, notes, and one-tap status updates (`arrived`, `in_service`, `completed`, `no_show`) without owner revenue disclosure (PRD-V2 §2.3). |
+| **Owner Booking Management** | `/dashboard/appointments` | `VERIFIED` | Calendar filtering, search by name/phone/reference, status transitions (Arrived, In-Service, Completed, Cancelled), quick WhatsApp/Call links, and Walk-In / Phone Client Manual Booking Modal. Verified via `scripts/test-walkin-booking.mjs` (4/4 tests passed). |
+| **Staff Schedule & Panel** | `/dashboard/staff`, `/api/staff`, `/api/staff/schedule`, `/api/staff/time-off` | `VERIFIED` | Specialist directory, active status toggles, 7-day working hours & shift editor, recurring lunch breaks, and planned absence scheduling. Verified via `scripts/test-staff-management.mjs` (5/5 tests passed). |
+| **Salon HR & Workforce Suite** | `/dashboard/staff`, `/api/staff/hr/*` | `VERIFIED` | Full HR lifecycle: 360° Profiles, Attendance in/out roster, Base + Commission payroll calculator, Recruitment Kanban board, and Resignation/Termination with auto-schedule deactivation. Verified via `scripts/test-staff-hr.mjs` (18/18 tests passed). |
+| **Async Notification Outbox** | Background worker / outbox processor | `VERIFIED` | `src/lib/booking/outbox-processor.js`, `/api/booking/notifications`, `/api/booking/notifications/process`. Tested via `scripts/test-notification-outbox.mjs`: WhatsApp/SMS/Email templates, batch processing, retry backoff (1m, 5m, 15m), dead-letter queue, and transactional decoupling (6/6 passed). |
+| **Light Theme Consistency (Issue B)** | `/book`, `/staff/appointments` | `VERIFIED` | Replaced legacy dark backgrounds (`#0d0b0a`, `#0f0f13`) with luxury warm off-white (`#FDFBF8`), white cards, and accessible typography using core design tokens. Verified in browser subagent. |
+| **Header & Nav Polish (Issue A)** | Header, desktop nav, mobile drawer | `VERIFIED` | Uncluttered 5-link navigation (Home, Services, About, Gallery, Contact), prominent "Book Appointment" CTA button with calendar icon, owner badge access, and responsive mobile drawer at 390px. Verified in browser subagent. |
+| **Dashboard Contrast & Readability (Issue C)** | `/dashboard/appointments`, `/dashboard/staff` | `VERIFIED` | Replaced dark-mode cards (`rgba(26,23,22,0.7)`) and white headings (`#f7f5f0`) with high-contrast surfaces (`#FFFFFF`), readable dark headings (`#2C2419`), accessible status pills, and dark green/red indicators. Verified in browser subagent. |
+| **Admin Panel Sidebar Architecture** | `/dashboard/*` (`DashboardShell.js`) | `VERIFIED` | Exact 11-item hierarchy: 6 Main Management items (Overview, Analytics, Appointments, Customers, Staff HR, Operations), subtle divider, and 5 Website modules (Edit Website, Services, Enquiries, Support, Account). Peach highlight with bronze left accent line. Verified in browser. |
+| **Customer Management Directory** | `/dashboard/customers` | `VERIFIED` | Direct client directory populated from Supabase `customers` table with local fallback, search & filter pills, VIP badge indicators, WhatsApp/call links, and client styling notes modal. Verified in browser. |
+| **Salon Operation Management Hub** | `/dashboard/operations` | `VERIFIED` | 6 operational sub-modules: Operations Overview, Daily Checklists (opening/closing), Service Stations (4 chairs + stylist portal link), Operational Tasks backlog, Salon Policies & Rules, and Inventory Roadmap Preview with clear Phase 2 badge. Verified in browser. |
 
 ---
 

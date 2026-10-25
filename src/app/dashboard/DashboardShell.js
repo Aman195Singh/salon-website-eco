@@ -5,10 +5,14 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   HiOutlineHome,
+  HiOutlineChartBar,
+  HiOutlineCalendar,
+  HiOutlineUserGroup,
+  HiOutlineIdentification,
+  HiOutlineClipboardCheck,
   HiOutlinePencilAlt,
   HiOutlineClipboardList,
   HiOutlineInbox,
-  HiOutlineChartBar,
   HiOutlineSupport,
   HiOutlineUser,
   HiOutlineLogout,
@@ -18,12 +22,21 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import styles from "./dashboard.module.css";
 
-const NAV_ITEMS = [
+// 1. Main Management Modules (1 - 6)
+const MAIN_MANAGEMENT_ITEMS = [
   { href: "/dashboard", icon: <HiOutlineHome size={20} />, label: "Overview", exact: true },
+  { href: "/dashboard/analytics", icon: <HiOutlineChartBar size={20} />, label: "Analytics" },
+  { href: "/dashboard/appointments", icon: <HiOutlineCalendar size={20} />, label: "Appointment Management" },
+  { href: "/dashboard/customers", icon: <HiOutlineUserGroup size={20} />, label: "Customer Management" },
+  { href: "/dashboard/staff", icon: <HiOutlineIdentification size={20} />, label: "Staff Management (HR)" },
+  { href: "/dashboard/operations", icon: <HiOutlineClipboardCheck size={20} />, label: "Operation Management" },
+];
+
+// 2. Existing Website Management Modules (7 - 11)
+const WEBSITE_MANAGEMENT_ITEMS = [
   { href: "/dashboard/edit", icon: <HiOutlinePencilAlt size={20} />, label: "Edit Website" },
   { href: "/dashboard/services", icon: <HiOutlineClipboardList size={20} />, label: "Services" },
   { href: "/dashboard/enquiries", icon: <HiOutlineInbox size={20} />, label: "Enquiries" },
-  { href: "/dashboard/analytics", icon: <HiOutlineChartBar size={20} />, label: "Analytics" },
   { href: "/dashboard/support", icon: <HiOutlineSupport size={20} />, label: "Support" },
   { href: "/dashboard/account", icon: <HiOutlineUser size={20} />, label: "Account" },
 ];
@@ -94,7 +107,26 @@ export default function DashboardShell({ children }) {
 
         {/* Nav */}
         <nav className={styles.sidebarNav} aria-label="Dashboard navigation">
-          {NAV_ITEMS.map((item) => (
+          {/* Main Management Section */}
+          <div className={styles.navSectionHeader}>Salon Management</div>
+          {MAIN_MANAGEMENT_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`${styles.navItem} ${isActive(item) ? styles.navItemActive : ""}`}
+              onClick={() => setSidebarOpen(false)}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
+
+          {/* Subtle Divider */}
+          <div className={styles.navDivider} role="separator" />
+
+          {/* Website Management Section */}
+          <div className={styles.navSectionHeader}>Website & Account</div>
+          {WEBSITE_MANAGEMENT_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
