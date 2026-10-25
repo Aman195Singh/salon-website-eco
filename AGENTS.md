@@ -11,7 +11,7 @@ Before changing code, read in this order:
 2. `PRODUCT_VISION.md` — long-term direction.
 3. `VERSION_ROADMAP.md` — release boundaries.
 4. `CURRENT_STATE.md` — known state and verification gaps.
-5. The active release PRD: `PRD-V2.md` for V2 Appointment Booking work (`PRD-V1.5.md` for historical baseline).
+5. The active release PRD: `PRD-V2.md` for V2 Appointment Booking work (`docs/archive/PRD-V1.5.md` for historical baseline).
 6. `DESIGN.md` — shared design rules.
 7. Relevant items in `TASKS.md`.
 
@@ -20,7 +20,7 @@ Inspect actual code before assuming that documented functionality exists or work
 ## 3. Current Release and Version Boundaries
 
 - **Active target:** V2 — Phase 1: Appointment Booking Management MVP.
-- `PRD-V1.md` and `PRD-V1.5.md` are the historical records of earlier releases. Do not rewrite them.
+- Historical records of earlier releases are preserved in `docs/archive/` (`PRD-V1.md`, `PRD-V1.5.md`, `PRE_V1.5_FIXES.md`, `V1.5_PROGRESS.md`, `V1.5_RELEASE_REPORT.md`). Do not rewrite them.
 - `PRD-V2.md` is the authoritative requirements source for V2 implementation.
 - `VERSION_ROADMAP.md` describes release phases across V1, V1.5, V2, and future releases.
 - `CURRENT_STATE.md` must distinguish verified features from reported or unverified features.

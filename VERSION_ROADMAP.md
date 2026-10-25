@@ -7,14 +7,14 @@
 ## V1 — Existing Baseline
 
 **Purpose:** Public salon website and basic owner management.
-**Status:** Released (baseline preserved in `PRD-V1.md`).
+**Status:** Released (baseline preserved in `docs/archive/PRD-V1.md`).
 
-Original requirements are preserved in `PRD-V1.md`.
+Original requirements are preserved in `docs/archive/PRD-V1.md`.
 
 ## V1.5 — Quality, Usability and Reliability
 
 **Purpose:** Quality, accessibility, responsiveness, email composer, CMS safety, and security hardening.
-**Status:** Released on 2026-10-24 (Tagged `v1.5`). See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md`.
+**Status:** Released on 2026-10-24 (Tagged `v1.5`). See `docs/archive/V1.5_RELEASE_REPORT.md` and `docs/archive/V1.5_PROGRESS.md`.
 
 ### In scope
 - Preserve and regression-test existing V1 features.
@@ -56,7 +56,7 @@ Original requirements are preserved in `PRD-V1.md`.
 
 ## Release Rules
 
-1. `PRD-V1.md` and `PRD-V1.5.md` remain the historical records of earlier releases; do not rewrite them.
+1. `docs/archive/PRD-V1.md` and `docs/archive/PRD-V1.5.md` remain the historical records of earlier releases; do not rewrite them.
 2. `PRD-V2.md` is the only requirements document authorizing V2 changes.
 3. Preserve existing V1/V1.5 data, routes, CMS capabilities, user permissions, and working behaviour.
 4. Do not claim a feature is implemented or verified without inspecting and testing it.

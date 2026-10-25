@@ -6,7 +6,7 @@ A modern, high-conversion luxury salon website and single-salon owner management
 
 ## 🎯 Current Target: V2 — Appointment Booking Management (V1.5 Released)
 
-- **V1.5 Quality Release:** Fully verified and released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. See `V1.5_RELEASE_REPORT.md` and `V1.5_PROGRESS.md`.
+- **V1.5 Quality Release:** Fully verified and released on 2026-10-24 (Tagged `v1.5`). Features include dynamic CMS rendering, mobile polish, email reply composer, CMS safety guards, security/RLS hardening, sitemap/robots, and legal pages. See `docs/archive/V1.5_RELEASE_REPORT.md` and `docs/archive/V1.5_PROGRESS.md`.
 - **V2 Milestone (Active):** Phase 1 — Appointment Booking Management MVP (`PRD-V2.md`). In-person appointments, staff scheduling, availability engine, double-booking prevention, mobile booking journey (`/book`), and owner calendar.
 
 ---
@@ -98,9 +98,10 @@ npm run build
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure & Documentation
 
 ```
+├── docs/                   # Guides (Hindi onboarding, prompts) and archive (V1/V1.5 PRDs & logs)
 ├── public/                 # Static images, luxury photos & icons
 ├── scripts/                # Verification and QA automation scripts
 ├── src/
@@ -115,7 +116,9 @@ npm run build
 │   ├── components/         # Header, Footer, FAQChatbot, Live Preview
 │   └── lib/                # Supabase client, Content helpers, Analytics
 ├── supabase-schema.sql     # Complete database schema and RLS policies
-├── PRD-V1.md               # Product Requirements Document (V1 Scope)
+├── AGENTS.md               # Safety rules and AI implementation guardrails
+├── PRD-V2.md               # Active Product Requirements Document (V2 Booking MVP)
+├── TASKS.md                # Task list and implementation progress
 ├── DESIGN.md               # Design System and visual guidelines
 └── README.md               # Project documentation
 ```
