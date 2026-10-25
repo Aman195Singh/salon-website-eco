@@ -193,6 +193,18 @@ Produce table: `Scenario | What can go wrong | Expected behavior | How handled |
 - Update `TASKS.md` and `CURRENT_STATE.md` only after actual verification.
 - Stop and report if requirements conflict, security/data is uncertain, or checks fail.
 
+## 17. Bug Investigation & Root-Cause Protocol
+
+When a bug, defect, or unexpected behavior is reported:
+1. **Never Rewrite:** Do NOT rewrite the feature to fix a bug. First reproduce the problem (run the app or relevant check) and document the evidence.
+2. **Find the Root Cause:** Trace the full path (`UI -> Server -> Database/RLS -> Response`). State the root cause with code and database evidence. Never guess or patch superficial symptoms.
+3. **Safe Diagnostics:** If the cause is unclear, add temporary diagnostic logging, identify the anomaly, and remove the logging afterwards.
+4. **Smallest Fix:** Make the smallest coherent fix and explain plainly why it resolves the root cause.
+5. **Check Siblings:** Check whether the identical bug exists in similar or cloned code paths across the codebase.
+6. **Edge-Case Matrix & Regression Test:** Build the edge-case matrix for the affected component, test each row, and write automated regression tests for rule/logic bugs.
+7. **Verify Before Declaring Fixed:** Never claim a bug is "fixed" unless the failure was reproduced before the fix and verified to pass after. Report using Step 7 format.
+
+
 
 <!-- BEGIN:nextjs-agent-rules -->
 
